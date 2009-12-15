@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+ul.random {
+	list-style: none;
+	position: absolute;
+}
+
+ul.random li {
+/*	float: left; */
+	position: absolute;
+}
+
+ul.random:after {
+	content: ".";
+	display: block;
+	height: 0px;
+	clear: both;
+	visibility: hidden;
+}
