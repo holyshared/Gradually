@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+.gradually {
+	list-style: none;
+	position: absolute;
+}
+
+.gradually li {
+	position: absolute;
+}
+
+.gradually:after {
+	content: ".";
+	display: block;
+	height: 0px;
+	clear: both;
+	visibility: hidden;
+}
