@@ -1,3 +1,25 @@
+/*
+---
+description: Element class, Elements class, and basic dom methods.
+
+license: MIT-style
+
+authors:
+- Jimmy Dean
+- Buck Kingsley
+
+requires:
+- localComponent1
+- [localComponent2, localComponent3]
+- externalPackage1:tag/component1
+- externalPackage1:tag: component4
+- externalPackage2:tag: [component1, component2]
+
+provides: [Element, Elements, $, $$]
+
+...
+*/
+
 var RandomImage = new Class({
 
 	Implements: [Events, Options],
