@@ -26,7 +26,8 @@ var Gradually = new Class({
 	options: {
 		'size': 100,
 		'periodical': 10000,
-		'zIndex': 9000
+		'zIndex': 9000,
+		'duration': 100
 	},
 
 	initialize: function (container, source, options) {
@@ -34,54 +35,38 @@ var Gradually = new Class({
 		this.source = ($type(source) == "string" ) ? $(source) : source;
 		this.container = ($type(container) == "string" ) ? $(container) : container;
 
-
-		this.container.setStyle("height", 450);
+		this.container.setStyle("height", 400);
 		this.container.setStyle("width", 950);
 		
 		this.images = this.source.getElements("li img");
+		this.zIndex	= this.images.length;
 		this.source.setStyle("diplay","none");
 
-		this.buildStructure();
-//		this._onTime.periodical(10000, this);
+		this.build();
+		this.onTime.delay(this.options.periodical, this);
 	},
 
-	buildStructure: function() {
-		var zIndex = this.images.length;
+	build: function() {
 		this.elements = new Array();
-		this.panelPosition = new Array();
-
-
-
 		this.images.each(function(image,k) {
 			var panelSet = this.createPanelSet(image);
-
-	
-			
 			panelSet.inject(this.container);
 		}.bind(this));
 
 		this.source.dispose();
-		this.elements = $(this.container).getElements(".gradually");
+		this.elements = $(this.container).getElements("ul");
 		this.index = 0;
 	},
 
 	createPanelSet: function(targetImage) {
-
-		var zIndex = this.images.length;
-
 		var src		= targetImage.getProperty('src');
 		var height	= targetImage.getProperty('height');
 		var width	= targetImage.getProperty('width');
 		var size    = this.options.size;
 		
-		var panelSet = new Element('ul', {'styles': { 
-			'height': height + "px",
-			'width': width + "px",
-			'zIndex': zIndex--
-		}});
-
-		var cols = width / size, rows = height / size; 
-
+		var panelSet = new Element('ul', {'styles': { 'height': height + "px", 'width': width + "px", 'zIndex': this.zIndex--}});
+		var cols = ((width / size) * size >= width) ? (width / size) : (width / size) + 1; 
+		var rows = ((height / size) * size >= height) ? (height / size) : (height / size) + 1; 
 		for (var x = 0; x < cols; x++) {
 			for (var y = 0; y < rows; y++) {
 				var l = x * size, t = y * size;
@@ -91,7 +76,6 @@ var Gradually = new Class({
 		}
 		return panelSet;
 	},
-
 
 	createPanel: function() {
 		var p = Array.link(arguments, {'x': Number.type,'y': Number.type, 'src': String.type, 'size': Number.type});
@@ -105,53 +89,62 @@ var Gradually = new Class({
 		return panel;
 	},
 
-
-
-
-
-	_onTime: function() {
-		this._hideImage();
+	getCurrentPanelSet: function() {
+		return this.elements[this.index];
 	},
 
-	_hideImage: function() {
-		var panelSet = this.elements[this.index ];
-		var panels = $(panelSet).getElements("li");
+	getCurrentPanels: function() {
+		var current = this.elements[this.index];
+		var panels = $(current).getElements("li");
+		return panels;
+	},
 
+	reset: function() {
+		this.hides = 0;
+		this.count = 0;
+	},
+
+	random: function() {
+		this.reset();
+		var panels = this.getCurrentPanels();
+		var total = panels.length;
 		var duration = 0;
-		this.hideImageCount = 0;
-		this.panelCount = panels.length;
-
-		var complete = function() {
-			if (this.hideImageCount >= this.panelCount - 1) {
-				this._changeZindex();
-				this.index = (this.index < this.elements.length - 1) ? this.index + 1 :  0;
-			}
-			this.hideImageCount++;
-		}.bind(this);
-
-		var i = 0;
 		while(panels.length > 0) {
-			var target = panels.getRandom();
-			var index = panels.indexOf(target);
-
-			var fx = target.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": complete});
-			fx.start({"opacity": [100, 0]});
-			duration = duration + 50;
-			panels.erase(target);
-			i++;
+			var pickup = panels.getRandom();
+			var size = pickup.getSize();
+			var position = pickup.getStyles("left", "top");
+			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this,[this.hides++,total])});
+			fx.start({
+				"opacity": [1, 0],
+				"height": [size.y, 0], "width": [size.x, 0],
+				"top": [position.top.toInt(), position.top.toInt() + (size.y/2)],
+				"left": [position.left.toInt(), position.left.toInt() + (size.x/2)]
+			});
+			duration = duration + this.options.duration;
+			panels.erase(pickup);
 		}
 	},
 
-	_changeZindex: function() {
-		var panelSet = this.elements[this.index];
-		var panels = $(panelSet).getElements("li");
-		panelSet.setStyle("zIndex", 1);
+	onTime: function() {
+		this.random();
+	},
+
+	onProgress: function(progress, total) {
+		(progress >= total - 1) ? this.onComplete.bind(this) : false;
+	},
+
+	onComplete: function() {
+		this.toFront();
+		this.index = (this.index < this.elements.length - 1) ? this.index + 1 : 0;
+		this.onTime.delay(this.options.periodical, this);
+	},
+
+	toFront: function() {
+		var current = this.getCurrentPanelSet();
+		var panels	= this.getCurrentPanels();
+		current.setStyle("zIndex", 1);
 		panels.each(function(e,k) {
-			e.setStyles({
-				"opacity": 100,
-				"left": this.panelPosition[k].x,
-				"top": this.panelPosition[k].y
-			});
+			e.setStyle("opacity", 1);
 		}.bind(this));
 
 		this.elements.each(function(e,k) {

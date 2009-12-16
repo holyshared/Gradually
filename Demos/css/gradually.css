@@ -2,16 +2,21 @@
 
 .gradually {
 	background: #cccccc;
+	margin: 0px;
 	padding: 10px;
 }
 
 .gradually ul {
 	list-style: none;
 	position: absolute;
+	margin: 0px;
+	padding: 0px;
 }
 
 .gradually  ul li {
 	position: absolute;
+	margin: 0px;
+	padding: 0px;
 }
 
 .gradually ul:after {
