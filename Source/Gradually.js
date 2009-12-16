@@ -1,11 +1,11 @@
 /*
 ---
-description: Element class, Elements class, and basic dom methods.
+description: 
 
 license: MIT-style
 
 authors:
-- Jimmy Dean
+- Noritaka Horio
 - Buck Kingsley
 
 requires:
@@ -15,9 +15,8 @@ requires:
 - externalPackage1:tag: component4
 - externalPackage2:tag: [component1, component2]
 
-provides: [Element, Elements, $, $$]
+provides: [Gradually]
 
-...
 */
 
 var Gradually = new Class({
@@ -33,25 +32,31 @@ var Gradually = new Class({
 	initialize: function (container, source, options) {
 		this.setOptions(options);
 		this.source = ($type(source) == "string" ) ? $(source) : source;
-//		this.container = ($type(container) == "string" ) ? $(container) : container;
+		this.container = ($type(container) == "string" ) ? $(container) : container;
 
 
-		this.sources = this.source.getElements("li img");
+		this.container.setStyle("height", 450);
+		this.container.setStyle("width", 950);
+		
+		this.images = this.source.getElements("li img");
+		this.source.setStyle("diplay","none");
 
 		this.buildStructure();
-		this._onTime.periodical(10000, this);
+//		this._onTime.periodical(10000, this);
 	},
 
-
 	buildStructure: function() {
-		var zIndex = sources.length;
+		var zIndex = this.images.length;
 		this.elements = new Array();
 		this.panelPosition = new Array();
 
 
 
-		sources.each(function(e,k) {
-			var panelSet = this.createPanelSet(e);
+		this.images.each(function(image,k) {
+			var panelSet = this.createPanelSet(image);
+
+	
+			
 			panelSet.inject(this.container);
 		}.bind(this));
 
@@ -61,44 +66,38 @@ var Gradually = new Class({
 	},
 
 	createPanelSet: function(targetImage) {
-		var zIndex = sources.length;
-		var src	= targetImage.getProperty('src');
-		var width = targetImage.getProperty('width');
 
-		var panelSet = new Element('ul', {
-			'class': 'gradually',
-			'styles': {
-				'width': width + "px",
-				'zIndex': zIndex--
+		var zIndex = this.images.length;
+
+		var src		= targetImage.getProperty('src');
+		var height	= targetImage.getProperty('height');
+		var width	= targetImage.getProperty('width');
+		var size    = this.options.size;
+		
+		var panelSet = new Element('ul', {'styles': { 
+			'height': height + "px",
+			'width': width + "px",
+			'zIndex': zIndex--
+		}});
+
+		var cols = width / size, rows = height / size; 
+
+		for (var x = 0; x < cols; x++) {
+			for (var y = 0; y < rows; y++) {
+				var l = x * size, t = y * size;
+				var panel = this.createPanel(l, t, src, size);
+				panel.inject(panelSet);
 			}
-		});
-
-
-
-
-
-
-
-		for (var i = 0; i < this.options.colum; i++) {
-			left = 0;
-			for (var j = 0; j < this.options.colum; j++) {
-				var l = j * size, t = i * size;
-				var p = this.createPanel(l,t,size);
-				p.inject(panelSet);
-				left = left - size;
-				this.panelPosition.push({x:l, y:t});
-			}
-			top = top - size;
 		}
 		return panelSet;
 	},
 
 
 	createPanel: function() {
-		var p = arguments.link({'x': Number.type,'y': Number.type,'size': Number.type});
+		var p = Array.link(arguments, {'x': Number.type,'y': Number.type, 'src': String.type, 'size': Number.type});
 		var panel = new Element("li", {
 			"styles": {
-				"background": "url(" + src + ") no-repeat " + p.x.toString() + "px  " + p.y.toString() + "px",
+				"background": "url(" + p.src + ") no-repeat " + -p.x.toString() + "px  " + -p.y.toString() + "px",
 				"height": p.size, "width": p.size,
 				"top": p.y, "left": p.x
 			}

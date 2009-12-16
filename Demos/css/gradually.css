@@ -1,15 +1,20 @@
 @charset "utf-8";
 
 .gradually {
+	background: #cccccc;
+	padding: 10px;
+}
+
+.gradually ul {
 	list-style: none;
 	position: absolute;
 }
 
-.gradually li {
+.gradually  ul li {
 	position: absolute;
 }
 
-.gradually:after {
+.gradually ul:after {
 	content: ".";
 	display: block;
 	height: 0px;
