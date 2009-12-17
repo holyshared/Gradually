@@ -26,8 +26,8 @@ var Gradually = new Class({
 	options: {
 		'size': 100,
 		'periodical': 10000,
-		'zIndex': 9000,
-		'duration': 100
+		'duration': 100,
+		'zIndex': 9000
 	},
 
 	initialize: function (container, source, options) {
@@ -35,6 +35,10 @@ var Gradually = new Class({
 		this.source = ($type(source) == "string" ) ? $(source) : source;
 		this.container = ($type(container) == "string" ) ? $(container) : container;
 
+		
+		this.parseElements(source);
+		
+		
 		this.container.setStyle("height", 400);
 		this.container.setStyle("width", 950);
 		
@@ -46,7 +50,46 @@ var Gradually = new Class({
 		this.onTime.delay(this.options.periodical, this);
 	},
 
+	parseElements: function(source) {
+		var size	= this.options.size;
+		var images	= source.getElements("li img");
+		this.psets = new Array();
+		images.each(function(e,k){
+			var panels = new Array();
+			var p    = e.getProperties("height", "width", "src", "title");
+			var cols = ((p.width/size) * size >= p.width) ? (p.width/size) : (p.width/size) + 1; 
+			var rows = ((p.height/size) * size >= p.height) ? (p.height/size) : (p.height/size) + 1; 
+			for (var x = 0; x < cols; x++) {
+				for (var y = 0; y < rows; y++) {
+					var l = x * size, t = y * size;
+					//heigth,width,top,left,background-position,src
+					var image = {"h": size, "w": size, "pt": t, "pl": l, "il": -l, "it": -t, "src": p.src};
+					panels.push(image);
+				}
+			}
+			this.psets.push({"h": size, "w": size, "panels": panels});
+		});
+		source.dispose();
+	},
+	
 	build: function() {
+		this.psets.each(function(pset,k){
+
+		
+		
+		
+		
+		
+		
+
+		});
+		
+		
+		
+		
+		
+		
+		
 		this.elements = new Array();
 		this.images.each(function(image,k) {
 			var panelSet = this.createPanelSet(image);
@@ -58,6 +101,34 @@ var Gradually = new Class({
 		this.index = 0;
 	},
 
+
+	
+	
+	_createPanelSet: function(p) {
+//		var src		= targetImage.getProperty('src');
+		//		var height	= targetImage.getProperty('height');
+		//		var width	= targetImage.getProperty('width');
+		var size = this.options.size;
+		
+		var panelSet = new Element('ul', {'styles': {'height': p.h + "px", 'width': p.w + "px", 'zIndex': this.zIndex--}});
+
+		var cols = ((p.w / size) * size >= p.w) ? (p.w / size) : (p.w / size) + 1; 
+		var rows = ((p.h / size) * size >= p.h) ? (p.h / size) : (p.h / size) + 1; 
+		for (var x = 0; x < cols; x++) {
+			for (var y = 0; y < rows; y++) {
+				var l = x * size, t = y * size;
+				var panel = this.createPanel(l, t, src, size);
+				panel.inject(panelSet);
+			}
+		}
+		return panelSet;
+	},
+
+	
+	
+	
+	
+	
 	createPanelSet: function(targetImage) {
 		var src		= targetImage.getProperty('src');
 		var height	= targetImage.getProperty('height');
@@ -108,7 +179,8 @@ var Gradually = new Class({
 		this.reset();
 		var panels = this.getCurrentPanels();
 		var total = panels.length;
-		var duration = 0;
+//		var duration = 0;
+		var duration = this.options.duration;
 		while(panels.length > 0) {
 			var pickup = panels.getRandom();
 			var size = pickup.getSize();
@@ -120,13 +192,37 @@ var Gradually = new Class({
 				"top": [position.top.toInt(), position.top.toInt() + (size.y/2)],
 				"left": [position.left.toInt(), position.left.toInt() + (size.x/2)]
 			});
-			duration = duration + this.options.duration;
+//			duration = duration + this.options.duration;
 			panels.erase(pickup);
 		}
 	},
 
+	
+	sequential: function() {
+		this.reset();
+		var panels = this.getCurrentPanels();
+		var total = panels.length;
+		var duration = 0;
+		for (var i = 0; i < total; i++) {
+			var pickup = panels[i];
+			var size = pickup.getSize();
+			var position = pickup.getStyles("left", "top");
+			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this,[this.hides++,total])});
+			fx.start({
+				"opacity": [1, 0],
+				"height": [size.y, 0], "width": [size.x, 0],
+				"top": [position.top.toInt(), position.top.toInt() + (size.y/2)],
+				"left": [position.left.toInt(), position.left.toInt() + (size.x/2)]
+			});
+			duration = duration + this.options.duration;
+		}
+	},
+	
+	
+	
 	onTime: function() {
-		this.random();
+this.sequential();
+//		this.random();
 	},
 
 	onProgress: function(progress, total) {
