@@ -24,7 +24,8 @@ var Gradually = new Class({
 	Implements: [Events, Options],
 
 	options: {
-		'size': 100,
+		'panelHeight': 80,
+		'panelWidth': 95,
 		'periodical': 10000,
 		'duration': 100,
 		'zIndex': 9000
@@ -37,7 +38,8 @@ var Gradually = new Class({
 
 		
 		this.parseElements(source);
-		
+				this.index = 0;
+
 		
 		this.container.setStyle("height", 400);
 		this.container.setStyle("width", 950);
@@ -51,114 +53,74 @@ var Gradually = new Class({
 	},
 
 	parseElements: function(source) {
-		var size	= this.options.size;
+		var height	= this.options.panelHeight;
+		var width	= this.options.panelWidth;
 		var images	= source.getElements("li img");
+
+		this.zIndex = images.length;
 		this.psets = new Array();
+
 		images.each(function(e,k){
 			var panels = new Array();
 			var p    = e.getProperties("height", "width", "src", "title");
-			var cols = ((p.width/size) * size >= p.width) ? (p.width/size) : (p.width/size) + 1; 
-			var rows = ((p.height/size) * size >= p.height) ? (p.height/size) : (p.height/size) + 1; 
+			var cols = ((p.width/width) * width >= p.width) ? (p.width/width) : (p.width/width) + 1; 
+			var rows = ((p.height/height) * height >= p.height) ? (p.height/height) : (p.height/height) + 1; 
 			for (var x = 0; x < cols; x++) {
 				for (var y = 0; y < rows; y++) {
-					var l = x * size, t = y * size;
+					var l = x * width, t = y * height;
 					//heigth,width,top,left,background-position,src
-					var image = {"h": size, "w": size, "pt": t, "pl": l, "il": -l, "it": -t, "src": p.src};
+					var image = {"h": height, "w": width, "pt": t, "pl": l, "il": -l, "it": -t, "src": p.src};
 					panels.push(image);
 				}
 			}
-			this.psets.push({"h": size, "w": size, "panels": panels});
-		});
+			this.psets.push({"h": p.height, "w": p.width, "panels": panels, "zIndex": this.zIndex--});
+		}.bind(this));
+
+		//Bye bye
 		source.dispose();
 	},
 	
 	build: function() {
-		this.psets.each(function(pset,k){
-
-		
-		
-		
-		
-		
-		
-
-		});
-		
-		
-		
-		
-		
-		
-		
-		this.elements = new Array();
-		this.images.each(function(image,k) {
-			var panelSet = this.createPanelSet(image);
+		this.psets.each(function(pset,k) {
+			var panelSet = this.createPanelSet(pset);
 			panelSet.inject(this.container);
 		}.bind(this));
-
-		this.source.dispose();
 		this.elements = $(this.container).getElements("ul");
-		this.index = 0;
 	},
 
 
 	
 	
-	_createPanelSet: function(p) {
-//		var src		= targetImage.getProperty('src');
-		//		var height	= targetImage.getProperty('height');
-		//		var width	= targetImage.getProperty('width');
+	createPanelSet: function(p) {
 		var size = this.options.size;
-		
-		var panelSet = new Element('ul', {'styles': {'height': p.h + "px", 'width': p.w + "px", 'zIndex': this.zIndex--}});
-
-		var cols = ((p.w / size) * size >= p.w) ? (p.w / size) : (p.w / size) + 1; 
-		var rows = ((p.h / size) * size >= p.h) ? (p.h / size) : (p.h / size) + 1; 
-		for (var x = 0; x < cols; x++) {
-			for (var y = 0; y < rows; y++) {
-				var l = x * size, t = y * size;
-				var panel = this.createPanel(l, t, src, size);
-				panel.inject(panelSet);
+		var panelSet = new Element('ul', {
+			'styles': {
+				'height': p.h + "px",
+				'width': p.w + "px",
+				'zIndex': p.zIndex
 			}
-		}
+		});
+
+		var panels = p.panels;
+		panels.each(function(panel,k){
+			var panel = this.createPanel(panel);
+			panel.inject(panelSet);
+		}.bind(this));
 		return panelSet;
 	},
 
-	
-	
-	
-	
-	
-	createPanelSet: function(targetImage) {
-		var src		= targetImage.getProperty('src');
-		var height	= targetImage.getProperty('height');
-		var width	= targetImage.getProperty('width');
-		var size    = this.options.size;
-		
-		var panelSet = new Element('ul', {'styles': { 'height': height + "px", 'width': width + "px", 'zIndex': this.zIndex--}});
-		var cols = ((width / size) * size >= width) ? (width / size) : (width / size) + 1; 
-		var rows = ((height / size) * size >= height) ? (height / size) : (height / size) + 1; 
-		for (var x = 0; x < cols; x++) {
-			for (var y = 0; y < rows; y++) {
-				var l = x * size, t = y * size;
-				var panel = this.createPanel(l, t, src, size);
-				panel.inject(panelSet);
-			}
-		}
-		return panelSet;
-	},
 
-	createPanel: function() {
-		var p = Array.link(arguments, {'x': Number.type,'y': Number.type, 'src': String.type, 'size': Number.type});
+	createPanel: function(p) {
 		var panel = new Element("li", {
 			"styles": {
-				"background": "url(" + p.src + ") no-repeat " + -p.x.toString() + "px  " + -p.y.toString() + "px",
-				"height": p.size, "width": p.size,
-				"top": p.y, "left": p.x
+				"background": "url(" + p.src + ") no-repeat " + p.il.toString() + "px  " + p.it.toString() + "px",
+				"height": p.h, "width": p.w,
+				"top": p.pt, "left": p.pl
 			}
 		});
 		return panel;
 	},
+	
 
 	getCurrentPanelSet: function() {
 		return this.elements[this.index];
@@ -171,8 +133,8 @@ var Gradually = new Class({
 	},
 
 	reset: function() {
-		this.hides = 0;
-		this.count = 0;
+		this.progress = 0;
+		this.total = 0;
 	},
 
 	random: function() {
@@ -180,19 +142,33 @@ var Gradually = new Class({
 		var panels = this.getCurrentPanels();
 		var total = panels.length;
 //		var duration = 0;
+
+
+
+
+		this.total = panels.length;
+		this.progress = 0;
+
+
 		var duration = this.options.duration;
 		while(panels.length > 0) {
 			var pickup = panels.getRandom();
 			var size = pickup.getSize();
 			var position = pickup.getStyles("left", "top");
-			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this,[this.hides++,total])});
-			fx.start({
+			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this)});
+/*			fx.start({
 				"opacity": [1, 0],
 				"height": [size.y, 0], "width": [size.x, 0],
 				"top": [position.top.toInt(), position.top.toInt() + (size.y/2)],
 				"left": [position.left.toInt(), position.left.toInt() + (size.x/2)]
 			});
-//			duration = duration + this.options.duration;
+*/
+			fx.start({
+				"opacity": [1, 0]
+			});
+
+
+			duration = duration + this.options.duration;
 			panels.erase(pickup);
 		}
 	},
@@ -201,13 +177,13 @@ var Gradually = new Class({
 	sequential: function() {
 		this.reset();
 		var panels = this.getCurrentPanels();
-		var total = panels.length;
+
 		var duration = 0;
 		for (var i = 0; i < total; i++) {
 			var pickup = panels[i];
 			var size = pickup.getSize();
 			var position = pickup.getStyles("left", "top");
-			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this,[this.hides++,total])});
+			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this)});
 			fx.start({
 				"opacity": [1, 0],
 				"height": [size.y, 0], "width": [size.x, 0],
@@ -221,15 +197,17 @@ var Gradually = new Class({
 	
 	
 	onTime: function() {
-this.sequential();
-//		this.random();
+//this.sequential();
+		this.random();
 	},
 
-	onProgress: function(progress, total) {
-		(progress >= total - 1) ? this.onComplete.bind(this) : false;
+	onProgress: function() {
+		this.progress++;
+		(this.progress >= this.total - 1) ? this.onComplete.bind(this)() : false;
 	},
 
 	onComplete: function() {
+		this.reset();
 		this.toFront();
 		this.index = (this.index < this.elements.length - 1) ? this.index + 1 : 0;
 		this.onTime.delay(this.options.periodical, this);
