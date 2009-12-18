@@ -24,11 +24,13 @@ var Gradually = new Class({
 	Implements: [Events, Options],
 
 	options: {
-		'panelHeight': 80,
-		'panelWidth': 95,
-		'periodical': 10000,
-		'duration': 100,
-		'zIndex': 9000
+		'panelHeight': 50,
+		'panelWidth': 59,
+		'periodical': 5000,
+		'duration': 30,
+		'zIndex': 9000,
+		'height': 250,
+		'width': 590
 	},
 
 	initialize: function (container, source, options) {
@@ -38,15 +40,15 @@ var Gradually = new Class({
 
 		
 		this.parseElements(source);
-				this.index = 0;
+		this.index = 0;
 
 		
-		this.container.setStyle("height", 400);
-		this.container.setStyle("width", 950);
+		this.container.setStyle("height", this.options.height);
+		this.container.setStyle("width", this.options.width);
 		
-		this.images = this.source.getElements("li img");
-		this.zIndex	= this.images.length;
-		this.source.setStyle("diplay","none");
+//		this.images = this.source.getElements("li img");
+//		this.zIndex	= this.images.length;
+//		this.source.setStyle("diplay","none");
 
 		this.build();
 		this.onTime.delay(this.options.periodical, this);
@@ -136,50 +138,16 @@ var Gradually = new Class({
 		this.progress = 0;
 		this.total = 0;
 	},
-
-	random: function() {
-		this.reset();
-		var panels = this.getCurrentPanels();
-		var total = panels.length;
-//		var duration = 0;
-
-
-
-
-		this.total = panels.length;
-		this.progress = 0;
-
-
-		var duration = this.options.duration;
-		while(panels.length > 0) {
-			var pickup = panels.getRandom();
-			var size = pickup.getSize();
-			var position = pickup.getStyles("left", "top");
-			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this)});
-/*			fx.start({
-				"opacity": [1, 0],
-				"height": [size.y, 0], "width": [size.x, 0],
-				"top": [position.top.toInt(), position.top.toInt() + (size.y/2)],
-				"left": [position.left.toInt(), position.left.toInt() + (size.x/2)]
-			});
-*/
-			fx.start({
-				"opacity": [1, 0]
-			});
-
-
-			duration = duration + this.options.duration;
-			panels.erase(pickup);
-		}
-	},
-
 	
 	sequential: function() {
 		this.reset();
 		var panels = this.getCurrentPanels();
 
+		this.total = panels.length;
+		this.progress = 0;
+
 		var duration = 0;
-		for (var i = 0; i < total; i++) {
+		for (var i = 0; i < this.total; i++) {
 			var pickup = panels[i];
 			var size = pickup.getSize();
 			var position = pickup.getStyles("left", "top");
@@ -197,8 +165,8 @@ var Gradually = new Class({
 	
 	
 	onTime: function() {
-//this.sequential();
-		this.random();
+this.sequential();
+	//	this.random();
 	},
 
 	onProgress: function() {
@@ -209,24 +177,37 @@ var Gradually = new Class({
 	onComplete: function() {
 		this.reset();
 		this.toFront();
+		this.resetPanelset();
+//dbug.log(this.index);
+
 		this.index = (this.index < this.elements.length - 1) ? this.index + 1 : 0;
 		this.onTime.delay(this.options.periodical, this);
 	},
 
-	toFront: function() {
-		var current = this.getCurrentPanelSet();
+	resetPanelset: function() {
+//		var current = this.getCurrentPanelSet();
 		var panels	= this.getCurrentPanels();
-		current.setStyle("zIndex", 1);
+		var props = this.psets[this.index].panels;
 		panels.each(function(e,k) {
-			e.setStyle("opacity", 1);
-		}.bind(this));
+			var p = this[k];
+			e.setStyles({
+				"opacity": 1,
+				"left": p.pl, "top": p.pt,
+				"heigth": p.h, "width": p.w,
+				"background-position": p.il.toString()+ "px " + p.it.toString()+ "px"
+			});
+		}.bind(props));
+	},
 
+	toFront: function() {
+dbug.log("panelset " + this.index.toString() + " zindex 1");
+		this.getCurrentPanelSet().setStyle("zIndex", 1);
 		this.elements.each(function(e,k) {
 			if (k != this.index) {
 				var zIndex= e.getStyle("zIndex").toInt();
 				e.setStyle("zIndex", ++zIndex);
+dbug.log("other panelset " + k.toString() + " zindex " + zIndex.toString());
 			}
 		}.bind(this));
 	}
-	
 });
