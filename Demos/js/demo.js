@@ -1,4 +1,14 @@
 window.addEvent("domready", function() {
-//	var images = $("base").getElements("li img");
-	new Gradually($("container"),  $("source"));
+
+	new Gradually(
+		$("container"),
+		$("source").getElements("li img"), {
+			'panelHeight': 55,
+			'panelWidth': 65,
+			'interval': 3000,
+			'duration': 30,
+			'zIndex': 9000
+		}
+	);
+
 });

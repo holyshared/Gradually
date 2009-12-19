@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+body {
+	font-family: Sylfaen, "Times New Roman";
+	font-size: 62.5%;
+	text-align: left;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 3.8em;
+	margin-bottom: 5px;
+}
+
+p {
+	font-size: 1.4em;
+	margin-bottom: 5px;
+}
+
+
+#warpper {
+	width: 950px;
+	margin: 0px auto;
+}

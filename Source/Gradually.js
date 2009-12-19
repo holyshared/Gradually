@@ -6,7 +6,6 @@ license: MIT-style
 
 authors:
 - Noritaka Horio
-- Buck Kingsley
 
 requires:
 - localComponent1
@@ -24,204 +23,213 @@ var Gradually = new Class({
 	Implements: [Events, Options],
 
 	options: {
-		'panelHeight': 80,
-		'panelWidth': 95,
-		'periodical': 10000,
-		'duration': 100,
-		'zIndex': 9000
+		'panelHeight': 55,
+		'panelWidth': 65,
+		'interval': 3000,
+		'duration': 30,
+		'zIndex': 9000,
+		'frameColor': '#000000',
+		'shadowColor': '#000000',
+		'shadowSize': 5
 	},
 
-	initialize: function (container, source, options) {
+	initialize: function (container,sources,options) {
 		this.setOptions(options);
-		this.source = ($type(source) == "string" ) ? $(source) : source;
-		this.container = ($type(container) == "string" ) ? $(container) : container;
+		this.container = container;
+		this.sources = sources;
+		this.canvases = [];
 
-		
-		this.parseElements(source);
-				this.index = 0;
-
-		
-		this.container.setStyle("height", 400);
-		this.container.setStyle("width", 950);
-		
-		this.images = this.source.getElements("li img");
-		this.zIndex	= this.images.length;
-		this.source.setStyle("diplay","none");
-
-		this.build();
-		this.onTime.delay(this.options.periodical, this);
+		this.addEvent("onPreload", this.onPreload.bind(this));
+		this.preload();
+		this.currentIndex = 0;
 	},
 
-	parseElements: function(source) {
-		var height	= this.options.panelHeight;
-		var width	= this.options.panelWidth;
-		var images	= source.getElements("li img");
+	onPreload: function() {
+		var zIndex = this.sources.length;
 
-		this.zIndex = images.length;
-		this.psets = new Array();
+var canvas = new Element("canvas", {"width": 650, "height": 275, "class":"frame","styles": {"zIndex": zIndex + 1}});
+canvas.inject(this.container);
 
-		images.each(function(e,k){
-			var panels = new Array();
-			var p    = e.getProperties("height", "width", "src", "title");
-			var cols = ((p.width/width) * width >= p.width) ? (p.width/width) : (p.width/width) + 1; 
-			var rows = ((p.height/height) * height >= p.height) ? (p.height/height) : (p.height/height) + 1; 
-			for (var x = 0; x < cols; x++) {
-				for (var y = 0; y < rows; y++) {
-					var l = x * width, t = y * height;
-					//heigth,width,top,left,background-position,src
-					var image = {"h": height, "w": width, "pt": t, "pl": l, "il": -l, "it": -t, "src": p.src};
-					panels.push(image);
-				}
-			}
-			this.psets.push({"h": p.height, "w": p.width, "panels": panels, "zIndex": this.zIndex--});
-		}.bind(this));
+var ctx = canvas.getContext('2d');
 
-		//Bye bye
-		source.dispose();
-	},
-	
-	build: function() {
-		this.psets.each(function(pset,k) {
-			var panelSet = this.createPanelSet(pset);
-			panelSet.inject(this.container);
-		}.bind(this));
-		this.elements = $(this.container).getElements("ul");
-	},
-
-
-	
-	
-	createPanelSet: function(p) {
-		var size = this.options.size;
-		var panelSet = new Element('ul', {
-			'styles': {
-				'height': p.h + "px",
-				'width': p.w + "px",
-				'zIndex': p.zIndex
-			}
-		});
-
-		var panels = p.panels;
-		panels.each(function(panel,k){
-			var panel = this.createPanel(panel);
-			panel.inject(panelSet);
-		}.bind(this));
-		return panelSet;
-	},
-
-
-	createPanel: function(p) {
-		var panel = new Element("li", {
-			"styles": {
-				"background": "url(" + p.src + ") no-repeat " + p.il.toString() + "px  " + p.it.toString() + "px",
-				"height": p.h, "width": p.w,
-				"top": p.pt, "left": p.pl
-			}
-		});
-		return panel;
-	},
-	
-
-	getCurrentPanelSet: function() {
-		return this.elements[this.index];
-	},
-
-	getCurrentPanels: function() {
-		var current = this.elements[this.index];
-		var panels = $(current).getElements("li");
-		return panels;
-	},
-
-	reset: function() {
-		this.progress = 0;
-		this.total = 0;
-	},
-
-	random: function() {
-		this.reset();
-		var panels = this.getCurrentPanels();
-		var total = panels.length;
-//		var duration = 0;
-
-
-
-
-		this.total = panels.length;
-		this.progress = 0;
-
-
-		var duration = this.options.duration;
-		while(panels.length > 0) {
-			var pickup = panels.getRandom();
-			var size = pickup.getSize();
-			var position = pickup.getStyles("left", "top");
-			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this)});
-/*			fx.start({
-				"opacity": [1, 0],
-				"height": [size.y, 0], "width": [size.x, 0],
-				"top": [position.top.toInt(), position.top.toInt() + (size.y/2)],
-				"left": [position.left.toInt(), position.left.toInt() + (size.x/2)]
-			});
+/*
+ctx.shadowBlur = 5;
+ctx.shadowColor	=  "#990000";
+ctx.shadowOffsetX = 0;
+ctx.shadowOffsetY = 0;
 */
-			fx.start({
-				"opacity": [1, 0]
+//ctx.fillStyle = "#990000";
+
+//ctx.beginPath();
+//ctx.arc(50, 50, 45, 0, Math.PI * 2, false);
+//ctx.clip();
+
+//var canvas = document.getElementById('c1');
+//if ( ! canvas || ! canvas.getContext ) { return false; }
+//var ctx = canvas.getContext('2d');
+ctx.beginPath();
+
+var grad  = ctx.createRadialGradient(
+650/2,275/2,50,
+650/2,275/2,650
+);
+grad.addColorStop(0,'rgba(0, 0, 0, 0)');
+grad.addColorStop(0.5,'rgba(0, 0, 0, 1)');
+ctx.fillStyle = grad;
+ctx.rect(0,0,650,275);
+ctx.fill();
+
+
+/*
+ctx.beginPath();
+ctx.moveTo(5, 5);
+ctx.lineTo(5, 5);
+ctx.lineTo(660, 5);
+ctx.lineTo(660, 285);
+ctx.lineTo(5, 285);
+ctx.closePath();
+ctx.fill();
+*/
+
+/*
+ctx.beginPath();
+ctx.rect(0, 0, 100, 100);
+ctx.fillStyle = "rgb(0,0,0)";
+ctx.fill();
+ctx.beginPath();
+ctx.arc(50, 50, 45, 0, Math.PI * 2, false);
+ctx.clip();
+var img = new Image();
+img.src = "clip_pic.png?" + new Date().getTime();
+img.onload = function() {
+  ctx.drawImage(img, 0, 0);
+}
+
+*/
+
+
+		this.sources.each(function(e,k) {
+			var p = e.getProperties("width", "height", "title", "alt", "src");
+			var canvas = new Element("canvas", {
+				"width": p.width,
+				"height": p.height,
+				"class": "source",
+				"styles": { "zIndex": zIndex-- }
 			});
+			canvas.inject(this.container);
+			this.canvases.push(canvas);
 
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(e,0,0,p.width,p.height);
 
-			duration = duration + this.options.duration;
-			panels.erase(pickup);
-		}
+		}.bind(this));
+
+		this.onStart();
 	},
 
-	
-	sequential: function() {
-		this.reset();
-		var panels = this.getCurrentPanels();
 
-		var duration = 0;
-		for (var i = 0; i < total; i++) {
-			var pickup = panels[i];
-			var size = pickup.getSize();
-			var position = pickup.getStyles("left", "top");
-			var fx = pickup.get("morph", {"duration": duration, "transition": "expo:out", "onComplete": this.onProgress.bind(this)});
-			fx.start({
-				"opacity": [1, 0],
-				"height": [size.y, 0], "width": [size.x, 0],
-				"top": [position.top.toInt(), position.top.toInt() + (size.y/2)],
-				"left": [position.left.toInt(), position.left.toInt() + (size.x/2)]
-			});
-			duration = duration + this.options.duration;
+	onStart: function() {
+		var op = this.options;
+
+		var current = this.getCurrent();
+		var canvas	= current.canvas;
+		var source	= current.source;
+		var size	= canvas.getSize();
+		var ctx		= canvas.getContext('2d');
+
+		var cols = size.x / op.panelWidth; 
+		var rows = size.y / op.panelHeight;
+		var duration = op.duration;
+
+		this.counter = 0;
+		this.total = cols * rows;
+
+		for (var x = 0; x < cols; x++) {
+			for (var y = 0; y < rows; y++) {
+
+				var left = x * op.panelWidth, top = y * op.panelHeight;
+				var context = {"ctx2d": ctx, "source": source, "x": left, "y": top, "width": op.panelWidth, "height": op.panelHeight}
+
+				var fx = new Fx.Gradually({
+					"transition": "expo:out",
+					"duration": duration,
+					"fps": 30,
+					"onMotion": this.onMotion.bind(context),
+					"onComplete": this.onProgress.bind(this)
+				});
+
+				fx.start({
+					"height": [op.panelHeight,0],
+					"width": [op.panelWidth,0],
+					"top": [top, top + op.panelHeight/2],
+					"left": [left,left + op.panelWidth/2]}
+				);
+				duration = duration + op.duration;	
+			}
 		}
+
 	},
-	
-	
-	
-	onTime: function() {
-//this.sequential();
-		this.random();
+
+	onMotion: function(props) {
+		this.ctx2d.clearRect(this.x, this.y, this.width, this.height);	
+		this.ctx2d.drawImage(this.source,
+			props.left, props.top,
+			props.width, props.height,
+			props.left, props.top,
+			props.width, props.height);
 	},
 
 	onProgress: function() {
-		this.progress++;
-		(this.progress >= this.total - 1) ? this.onComplete.bind(this)() : false;
+		this.counter++;
+		if (this.counter >= this.total) {
+			this.next();
+			this.onStart.delay(this.options.interval,this);
+		}
 	},
 
-	onComplete: function() {
-		this.reset();
+	next: function() {
 		this.toFront();
-		this.index = (this.index < this.elements.length - 1) ? this.index + 1 : 0;
-		this.onTime.delay(this.options.periodical, this);
+		this.currentIndex = (this.currentIndex < this.canvases.length - 1) ? this.currentIndex + 1 : 0;
+		return this.getCurrent();
 	},
+
+	getCurrent: function() {
+		this.current = {
+			"canvas": this.canvases[this.currentIndex],
+			"source": this.sources[this.currentIndex]
+		};		
+		return this.current;
+	},
+	
+	preload: function(){
+		this.loadCount = 0;
+		this.sources.each(function(e,k) {
+			var src = e.getProperty("src");
+			var img = new Image();
+			img.src = src;
+
+			var h = function() {
+				this.loadCount++;
+				if (this.loadCount >= this.sources.length) {
+					this.fireEvent("onPreload");
+				}	
+			}.bind(this)
+			img.onload = h;
+
+		}.bind(this));
+	},
+
 
 	toFront: function() {
-		var current = this.getCurrentPanelSet();
-		var panels	= this.getCurrentPanels();
-		current.setStyle("zIndex", 1);
-		panels.each(function(e,k) {
-			e.setStyle("opacity", 1);
-		}.bind(this));
+		var current = this.getCurrent();
+		var canvas	= current.canvas;
+		var source	= current.source;
 
-		this.elements.each(function(e,k) {
+		canvas.setStyle("zIndex", 1);
+		var ctx = canvas.getContext('2d');
+		ctx.drawImage(source,0,0,source.getProperty("width"),source.getProperty("height"));
+
+		this.canvases.each(function(e,k) {
 			if (k != this.index) {
 				var zIndex= e.getStyle("zIndex").toInt();
 				e.setStyle("zIndex", ++zIndex);
@@ -229,4 +237,31 @@ var Gradually = new Class({
 		}.bind(this));
 	}
 	
+});
+
+Fx.Gradually = new Class({
+
+	Extends: Fx,
+
+	compute: function(from, to, delta) {
+		this.value = {};
+		for (var p in from) this.value[p] = this.parent(from[p], to[p], delta);
+		this.fireEvent('motion', this.value);
+		return this.value;
+	},
+
+	get: function(){
+		return this.value || 0;
+	},
+
+	start: function(props) {
+		if (!this.check(props)) return this;
+		var from = {}, to = {};
+		for (var p in props) {
+			from[p] = props[p].shift();
+			to[p]	= props[p].shift();
+		}
+		return this.parent(from, to);
+	}
+
 });
