@@ -1,7 +1,7 @@
 Gradually
 ===========
 
-Gradually information text......
+Gradually is an experimental slide show plug-in using the canvas element.
 
 ![Screenshot](http://url_to_project_screenshot)
 

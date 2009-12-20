@@ -38,7 +38,6 @@ var Gradually = new Class({
 		this.container = container;
 		this.sources = sources;
 		this.canvases = [];
-
 		this.addEvent("onPreload", this.onPreload.bind(this));
 		this.preload();
 		this.currentIndex = 0;
@@ -46,7 +45,7 @@ var Gradually = new Class({
 
 	onPreload: function() {
 		var zIndex = this.sources.length;
-
+alert("onPreload");
 var canvas = new Element("canvas", {"width": 650, "height": 275, "class":"frame","styles": {"zIndex": zIndex + 1}});
 canvas.inject(this.container);
 
@@ -73,8 +72,8 @@ var grad  = ctx.createRadialGradient(
 650/2,275/2,50,
 650/2,275/2,650
 );
-grad.addColorStop(0,'rgba(0, 0, 0, 0)');
-grad.addColorStop(0.5,'rgba(0, 0, 0, 1)');
+grad.addColorStop(0,'rgba(1, 0, 0, 0)');
+grad.addColorStop(0.5,'rgba(2, 0, 0, 1)');
 ctx.fillStyle = grad;
 ctx.rect(0,0,650,275);
 ctx.fill();
@@ -124,11 +123,11 @@ img.onload = function() {
 
 		}.bind(this));
 
-		this.onStart();
+		this.draw();
 	},
 
 
-	onStart: function() {
+	draw: function() {
 		var op = this.options;
 
 		var current = this.getCurrent();
@@ -151,11 +150,12 @@ img.onload = function() {
 				var context = {"ctx2d": ctx, "source": source, "x": left, "y": top, "width": op.panelWidth, "height": op.panelHeight}
 
 				var fx = new Fx.Gradually({
-					"transition": "expo:out",
+					"transition": "back:out",
 					"duration": duration,
+					"link": "cancel",
 					"fps": 30,
-					"onMotion": this.onMotion.bind(context),
-					"onComplete": this.onProgress.bind(this)
+					"onMotion": this.onDrawMotion.bind(context),
+					"onComplete": this.onDrawProgress.bind(this)
 				});
 
 				fx.start({
@@ -164,26 +164,31 @@ img.onload = function() {
 					"top": [top, top + op.panelHeight/2],
 					"left": [left,left + op.panelWidth/2]}
 				);
-				duration = duration + op.duration;	
+				duration = duration + 50;
 			}
 		}
-
 	},
 
-	onMotion: function(props) {
-		this.ctx2d.clearRect(this.x, this.y, this.width, this.height);	
+
+
+
+	onDrawMotion: function(props) {
+		var drawHeight = (props.height > 0) ? props.height : 0.01;
+		var drawWidth  = (props.width > 0) ? props.width : 0.01;
+
+		this.ctx2d.clearRect(this.x, this.y, this.width, this.height);
 		this.ctx2d.drawImage(this.source,
 			props.left, props.top,
-			props.width, props.height,
+			drawWidth, drawHeight,
 			props.left, props.top,
-			props.width, props.height);
+			drawWidth, drawHeight);
 	},
 
-	onProgress: function() {
+	onDrawProgress: function() {
 		this.counter++;
 		if (this.counter >= this.total) {
 			this.next();
-			this.onStart.delay(this.options.interval,this);
+			this.draw.delay(this.options.interval,this);
 		}
 	},
 
@@ -197,11 +202,12 @@ img.onload = function() {
 		this.current = {
 			"canvas": this.canvases[this.currentIndex],
 			"source": this.sources[this.currentIndex]
-		};		
+		};
 		return this.current;
 	},
 	
 	preload: function(){
+alert("preload");
 		this.loadCount = 0;
 		this.sources.each(function(e,k) {
 			var src = e.getProperty("src");
@@ -209,12 +215,17 @@ img.onload = function() {
 			img.src = src;
 
 			var h = function() {
+alert("load");
+
 				this.loadCount++;
 				if (this.loadCount >= this.sources.length) {
 					this.fireEvent("onPreload");
 				}	
 			}.bind(this)
 			img.onload = h;
+
+alert("aa");
+
 
 		}.bind(this));
 	},
@@ -230,9 +241,10 @@ img.onload = function() {
 		ctx.drawImage(source,0,0,source.getProperty("width"),source.getProperty("height"));
 
 		this.canvases.each(function(e,k) {
-			if (k != this.index) {
+			if (k != this.currentIndex) {
 				var zIndex= e.getStyle("zIndex").toInt();
-				e.setStyle("zIndex", ++zIndex);
+				zIndex++;
+				e.setStyle("zIndex", zIndex);
 			}
 		}.bind(this));
 	}
@@ -243,9 +255,23 @@ Fx.Gradually = new Class({
 
 	Extends: Fx,
 
+	initialize: function(options){
+		this.parent(options);
+	},
+
+	prepare: function(property, values){
+		values = $splat(values);
+		var values1 = values[1];
+		if (!$chk(values1)){
+			values[1] = values[0];
+			values[0] = values[0];
+		}
+		return {from: values[0], to: values[1]};
+	},
+
 	compute: function(from, to, delta) {
 		this.value = {};
-		for (var p in from) this.value[p] = this.parent(from[p], to[p], delta);
+		for (var p in from) { this.value[p] = this.parent(from[p], to[p], delta); }
 		this.fireEvent('motion', this.value);
 		return this.value;
 	},
@@ -258,8 +284,9 @@ Fx.Gradually = new Class({
 		if (!this.check(props)) return this;
 		var from = {}, to = {};
 		for (var p in props) {
-			from[p] = props[p].shift();
-			to[p]	= props[p].shift();
+			var parsed = this.prepare(p, props[p]);
+			from[p] = parsed.from;
+			to[p] = parsed.to;
 		}
 		return this.parent(from, to);
 	}
