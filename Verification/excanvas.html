@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Gradually</title>
+		<meta name="keywords" content="mootools,example,javascript,framework,programing,animation,guide" />
+		<meta name="description" content="" />
+		<meta name="author" content="Noritaka Horio" />
+		<meta name="copyright" content="2009 Noritaka Horio All rights reserved" />
+		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen,print" />
+		<link rel="stylesheet" type="text/css" href="css/gradually.css" media="screen,print" />
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/excanvas.compiled.js"></script>
+		<script type="text/javascript">
+			window.addEvent("load", function(){
+				var image  = $("source").getElement("img");
+				var canvas = $("container").getElement("canvas");
+				var ctx = canvas.getContext("2d");
+				var x = 0;
+				for (var x = 0; x < 10; x++) {
+					for (var y = 0; y < 10; y++) {
+						var left = x * 65, top = y * 55;
+						try {
+							ctx.drawImage(image, left, top, 65, 55, left, top, 65, 55);
+						} catch(e) {
+						}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="warpper">
+			<h1>excanvas</h1>
+			<div id="container" class="gradually">
+				<canvas height="275" width="650"></canvas>
+			</div>
+			<p id="source"><img src="../Demos/images/demo1.jpg" width="650" height="275" /></p>
+        </div>
+	</body>
+</html> 

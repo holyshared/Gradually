@@ -45,68 +45,7 @@ var Gradually = new Class({
 
 	onPreload: function() {
 		var zIndex = this.sources.length;
-alert("onPreload");
-var canvas = new Element("canvas", {"width": 650, "height": 275, "class":"frame","styles": {"zIndex": zIndex + 1}});
-canvas.inject(this.container);
-
-var ctx = canvas.getContext('2d');
-
-/*
-ctx.shadowBlur = 5;
-ctx.shadowColor	=  "#990000";
-ctx.shadowOffsetX = 0;
-ctx.shadowOffsetY = 0;
-*/
-//ctx.fillStyle = "#990000";
-
-//ctx.beginPath();
-//ctx.arc(50, 50, 45, 0, Math.PI * 2, false);
-//ctx.clip();
-
-//var canvas = document.getElementById('c1');
-//if ( ! canvas || ! canvas.getContext ) { return false; }
-//var ctx = canvas.getContext('2d');
-ctx.beginPath();
-
-var grad  = ctx.createRadialGradient(
-650/2,275/2,50,
-650/2,275/2,650
-);
-grad.addColorStop(0,'rgba(1, 0, 0, 0)');
-grad.addColorStop(0.5,'rgba(2, 0, 0, 1)');
-ctx.fillStyle = grad;
-ctx.rect(0,0,650,275);
-ctx.fill();
-
-
-/*
-ctx.beginPath();
-ctx.moveTo(5, 5);
-ctx.lineTo(5, 5);
-ctx.lineTo(660, 5);
-ctx.lineTo(660, 285);
-ctx.lineTo(5, 285);
-ctx.closePath();
-ctx.fill();
-*/
-
-/*
-ctx.beginPath();
-ctx.rect(0, 0, 100, 100);
-ctx.fillStyle = "rgb(0,0,0)";
-ctx.fill();
-ctx.beginPath();
-ctx.arc(50, 50, 45, 0, Math.PI * 2, false);
-ctx.clip();
-var img = new Image();
-img.src = "clip_pic.png?" + new Date().getTime();
-img.onload = function() {
-  ctx.drawImage(img, 0, 0);
-}
-
-*/
-
-
+		this.drawShadow();
 		this.sources.each(function(e,k) {
 			var p = e.getProperties("width", "height", "title", "alt", "src");
 			var canvas = new Element("canvas", {
@@ -118,14 +57,27 @@ img.onload = function() {
 			canvas.inject(this.container);
 			this.canvases.push(canvas);
 
-			var ctx = canvas.getContext('2d');
-			ctx.drawImage(e,0,0,p.width,p.height);
+			var ctx = (canvas.getContext) ? canvas.getContext('2d') : G_vmlCanvasManager.initElement(canvas).getContext('2d');
+			(Browser.Engine.presto) ? ctx.drawImage(e,0,0) : ctx.drawImage(e,0,0,p.width,p.height);
 
 		}.bind(this));
 
 		this.draw();
 	},
 
+	drawShadow: function(){
+		var canvas = new Element("canvas", {"width": 650, "height": 275, "class":"frame","styles": {"zIndex": this.sources.length + 1}});
+		canvas.inject(this.container);
+
+		var ctx = (canvas.getContext) ? canvas.getContext('2d') : G_vmlCanvasManager.initElement(canvas).getContext('2d');
+		ctx.beginPath();
+		var grad = ctx.createRadialGradient(650 / 2, 275 / 2, 50, 650 / 2, 275 / 2, 650);
+		grad.addColorStop(0, 'rgba(1, 0, 0, 0)');
+		grad.addColorStop(0.5, 'rgba(2, 0, 0, 1)');
+		ctx.fillStyle = grad;
+		ctx.rect(0, 0, 650, 275);
+		ctx.fill();
+	},
 
 	draw: function() {
 		var op = this.options;
@@ -169,9 +121,6 @@ img.onload = function() {
 		}
 	},
 
-
-
-
 	onDrawMotion: function(props) {
 		var drawHeight = (props.height > 0) ? props.height : 0.01;
 		var drawWidth  = (props.width > 0) ? props.width : 0.01;
@@ -207,29 +156,12 @@ img.onload = function() {
 	},
 	
 	preload: function(){
-alert("preload");
-		this.loadCount = 0;
+		var preloadImages = [];
 		this.sources.each(function(e,k) {
-			var src = e.getProperty("src");
-			var img = new Image();
-			img.src = src;
-
-			var h = function() {
-alert("load");
-
-				this.loadCount++;
-				if (this.loadCount >= this.sources.length) {
-					this.fireEvent("onPreload");
-				}	
-			}.bind(this)
-			img.onload = h;
-
-alert("aa");
-
-
-		}.bind(this));
+			preloadImages.push(e.getProperty("src"));
+		});
+		var images = new Asset.images(preloadImages, {"onComplete": this.fireEvent.bind(this, "onPreload")});
 	},
-
 
 	toFront: function() {
 		var current = this.getCurrent();
@@ -238,7 +170,7 @@ alert("aa");
 
 		canvas.setStyle("zIndex", 1);
 		var ctx = canvas.getContext('2d');
-		ctx.drawImage(source,0,0,source.getProperty("width"),source.getProperty("height"));
+		ctx.drawImage(source,0,0);
 
 		this.canvases.each(function(e,k) {
 			if (k != this.currentIndex) {

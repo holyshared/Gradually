@@ -1,6 +1,4 @@
-window.addEvent("domready", function() {
-//dbug.enable();		
-
+window.addEvent("load", function() {
 	new Gradually(
 		$("container"),
 		$("source").getElements("li img"), {
