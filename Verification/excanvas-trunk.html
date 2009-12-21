@@ -10,7 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen,print" />
 		<link rel="stylesheet" type="text/css" href="css/gradually.css" media="screen,print" />
 		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
-		<script type="text/javascript" src="js/excanvas.compiled.js"></script>
+		<script type="text/javascript" src="js/excanvas-trunk.js"></script>
 		<script type="text/javascript">
 			window.addEvent("load", function(){
 				var image  = $("source").getElement("img");
@@ -23,6 +23,7 @@
 						try {
 							ctx.drawImage(image, left, top, 65, 55, left, top, 65, 55);
 						} catch(e) {
+							alert(e.message);
 						}
 					}
 				}
