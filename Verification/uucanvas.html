@@ -10,9 +10,16 @@
 		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen,print" />
 		<link rel="stylesheet" type="text/css" href="css/gradually.css" media="screen,print" />
 		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
-		<script type="text/javascript" src="js/excanvas.compiled.js"></script>
+		<script type="text/xaml" id="xaml">
+			<?xml version="1.0"?>
+        	<Canvas xmlns="http://schemas.microsoft.com/client/2007"></Canvas>
+		</script>
+
+		<script type="text/javascript" src="js/uuCanvas.js"></script>
 		<script type="text/javascript">
-			window.addEvent("load", function(){
+			var useCanvas = false;
+		    uuCanvas.ready(function() {
+				var useCanvas = true;
 				var image  = $("source").getElement("img");
 				var canvas = $("container").getElement("canvas");
 				var ctx = canvas.getContext("2d");
@@ -26,14 +33,14 @@
 						}
 					}
 				}
-			});
+		    });
 		</script>
 	</head>
 	<body>
 		<div id="warpper">
 			<h1>excanvas</h1>
 			<div id="container" class="gradually">
-				<canvas height="275" width="650"></canvas>
+				<canvas id="canvas" height="275" width="650"></canvas>
 			</div>
 			<p id="source"><img src="../Demos/images/demo1.jpg" width="650" height="275" /></p>
         </div>
