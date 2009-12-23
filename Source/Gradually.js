@@ -45,7 +45,7 @@ var Gradually = new Class({
 
 	onPreload: function() {
 		var zIndex = this.sources.length;
-		this.drawShadow();
+//		this.drawShadow();
 		this.sources.each(function(e,k) {
 			var p = e.getProperties("width", "height", "title", "alt", "src");
 			var canvas = new Element("canvas", {
@@ -55,21 +55,24 @@ var Gradually = new Class({
 				"styles": { "zIndex": zIndex-- }
 			});
 			canvas.inject(this.container);
+			canvas = (canvas.getContext) ? canvas : Gradually.Canvas.init(canvas, this.options);
 			this.canvases.push(canvas);
 
-			var ctx = (canvas.getContext) ? canvas.getContext('2d') : G_vmlCanvasManager.initElement(canvas).getContext('2d');
+			var ctx = canvas.getContext('2d');
 			(Browser.Engine.presto) ? ctx.drawImage(e,0,0) : ctx.drawImage(e,0,0,p.width,p.height);
 
 		}.bind(this));
 
-		this.draw();
+
+		this.draw.delay(this.options.interval,this);
 	},
 
 	drawShadow: function(){
 		var canvas = new Element("canvas", {"width": 650, "height": 275, "class":"frame","styles": {"zIndex": this.sources.length + 1}});
 		canvas.inject(this.container);
+		canvas = (canvas.getContext) ? canvas : Gradually.Canvas.init(canvas);
 
-		var ctx = (canvas.getContext) ? canvas.getContext('2d') : G_vmlCanvasManager.initElement(canvas).getContext('2d');
+		var ctx = canvas.getContext('2d');
 		ctx.beginPath();
 		var grad = ctx.createRadialGradient(650 / 2, 275 / 2, 50, 650 / 2, 275 / 2, 650);
 		grad.addColorStop(0, 'rgba(1, 0, 0, 0)');
@@ -80,24 +83,23 @@ var Gradually = new Class({
 	},
 
 	draw: function() {
-		var op = this.options;
-
+		var op		= this.options;
 		var current = this.getCurrent();
 		var canvas	= current.canvas;
 		var source	= current.source;
 		var size	= canvas.getSize();
+
 		var ctx		= canvas.getContext('2d');
+
+		var duration = op.duration;
 
 		var cols = size.x / op.panelWidth; 
 		var rows = size.y / op.panelHeight;
-		var duration = op.duration;
-
 		this.counter = 0;
 		this.total = cols * rows;
 
 		for (var x = 0; x < cols; x++) {
 			for (var y = 0; y < rows; y++) {
-
 				var left = x * op.panelWidth, top = y * op.panelHeight;
 				var context = {"ctx2d": ctx, "source": source, "x": left, "y": top, "width": op.panelWidth, "height": op.panelHeight}
 
@@ -174,7 +176,7 @@ var Gradually = new Class({
 
 		this.canvases.each(function(e,k) {
 			if (k != this.currentIndex) {
-				var zIndex= e.getStyle("zIndex").toInt();
+				var zIndex = e.getStyle("zIndex").toInt();
 				zIndex++;
 				e.setStyle("zIndex", zIndex);
 			}
@@ -182,6 +184,91 @@ var Gradually = new Class({
 	}
 	
 });
+
+
+
+Gradually.Canvas = {
+
+	init: function(canvas, options) {
+		return this.createCanvas(canvas, options);
+	},
+
+	createCanvas: function(canvas, options) {
+		var o = options;
+		var p = canvas.getProperties("width", "height", "title", "alt", "src", "class");
+		var s = canvas.getStyles("zIndex");
+		var resemblance = new Element("div", {"class": p["class"], "styles": $merge(s, {"width": p.width, "height": p.height})});
+		var container = canvas.parentNode;
+		resemblance.inject(container);
+
+		var images = new Array(), cols = p.width / o.panelWidth, rows = p.height / o.panelHeight;
+		for (var x = 0; x < cols; x++) {
+			for (var y = 0; y < rows; y++) {
+				var left = x * o.panelWidth, top = y * o.panelHeight;
+
+				var image = new Element("div");
+				image.inject(resemblance);
+
+				var props = {
+					"class": "x" + x.toString() + "y" + y.toString(),
+					"position": "absolute",
+					"left": left, "top": top,
+					"width": o.panelWidth, "height": o.panelHeight
+				};
+				image.setStyles(props);
+				image._restore = function(props) {
+					this.setStyles(props);
+				}.bind(image, props)
+
+				images.push(image);
+			}
+		}
+		canvas.dispose();
+
+		canvas = this.create2DContxt(resemblance, images);
+
+		return canvas;
+	},
+
+	create2DContxt: function(canvas, images) {
+
+		var context = {};
+		context.container	= canvas;
+		context.images		= images;
+		context.index		= 0;
+
+		context.clearRect = function(x,y,width,height) {
+			this.index = (this.images.length - 1 > this.index) ? this.index + 1 : 0;
+			this.images[this.index].setStyle("background", "none");
+		}
+
+		context.drawImage = function(element,x,y,width,height) {
+			var background = "url(" + element.getProperty("src") + ") no-repeat ";
+
+			if (arguments.length > 3) {
+				background += " -" + x.toString() + "px -" + y.toString() +  "px";
+				this.images[this.index].setStyles({"left": x, "top": y, "width": width, "height": height, "background": background});
+			} else {
+				//_restore
+				this.images.each(function(e,k){
+					e._restore();
+					var s = e.getStyles("left", "top", "width", "height");
+					var p = " -" + s.left.toString() + " -" + s.top.toString();
+					e.setStyle("background", background + p);
+				});
+			}
+		}
+
+		canvas.getContext = function(type) {
+			return this;
+		}.bind(context)
+
+		return canvas;
+	}
+
+};
+
+
 
 Fx.Gradually = new Class({
 
