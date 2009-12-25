@@ -5,10 +5,19 @@ window.addEvent("domready", function(){
 		'panelWidth': 65,
 		'interval': 3000,
 		'duration': 800,
-		'zIndex': 9000
+		'zIndex': 9000,
+		'onStart': function() {
+			$("container").getElement("p.information").set("html", "now loading....");
+		},
+		'onPreload': function(images) {
+			$("container").getElement("p.information").set("html", images.length.toString() + "loaded");
+		},
+		'onChange': function(image) {
+			$("container").getElement("p.information").set("html", image.title + " : " + image.alt);
+		}
 	};
 	
-	var container	= $("container");
+	var container	= $("gradually-container");
 	var sources		= $("source").getElements("li img");
 	new Gradually(container, sources, options);
 	

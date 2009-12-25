@@ -1,10 +1,13 @@
 @charset "utf-8";
 
-.gradually {
-	margin: 0px;
+div#container {
+	width: 650px;
 	padding: 10px;
 	background: #000000;
-	width: 650px;
+}
+
+.gradually {
+	margin: 0px;
 	height: 275px;
 }
 
@@ -17,4 +20,10 @@
 .gradually .frame {
 	position: absolute;
 	margin: 0px auto;
+}
+
+p.information {
+	background: #000000;
+	text-align: right;
+	color: #ffffff;
 }

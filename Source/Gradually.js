@@ -1,6 +1,6 @@
 /*
 ---
-description: 
+description: Gradually is an experimental slide show plug-in using the canvas element.
 
 license: MIT-style
 
@@ -8,11 +8,16 @@ authors:
 - Noritaka Horio
 
 requires:
-- localComponent1
-- [localComponent2, localComponent3]
-- externalPackage1:tag/component1
-- externalPackage1:tag: component4
-- externalPackage2:tag: [component1, component2]
+  core/1.2.4:
+  - Core/*
+  - Native/*
+  - Class/*
+  - Element/*
+  - Utilities/Selecter
+  - Utilities/DomReady
+  - Fx/Fx
+  more/1.2.4.2:
+  - Assets
 
 provides: [Gradually]
 
@@ -28,9 +33,11 @@ var Gradually = new Class({
 		'interval': 3000,
 		'duration': 30,
 		'zIndex': 9000,
-		'frameColor': '#000000',
-		'shadowColor': '#000000',
-		'shadowSize': 5
+/*
+		'onStart': $empty,
+		'onPreload': $empty,
+		'onChange': $empty
+*/
 	},
 
 	initialize: function (container,sources,options) {
@@ -38,14 +45,16 @@ var Gradually = new Class({
 		this.container = container;
 		this.sources = sources;
 		this.canvases = [];
-		this.addEvent("onPreload", this.onPreload.bind(this));
-		this.preload();
+		this.properties = [];
 		this.currentIndex = 0;
+		this.counter = 0;
+		this.addEvent("onImagePreload", this.onImagePreload.bind(this));
+		this.preload();
+		this.fireEvent("start");
 	},
 
-	onPreload: function() {
+	onImagePreload: function() {
 		var zIndex = this.sources.length;
-//		this.drawShadow();
 		this.sources.each(function(e,k) {
 			var p = e.getProperties("width", "height", "title", "alt", "src");
 			var canvas = new Element("canvas", {
@@ -55,31 +64,61 @@ var Gradually = new Class({
 				"styles": { "zIndex": zIndex-- }
 			});
 			canvas.inject(this.container);
-			canvas = (canvas.getContext) ? canvas : Gradually.Canvas.init(canvas, this.options);
+			canvas = (canvas.getContext) ? canvas : Gradually.EPCanvas.init(canvas,this.options);
 			this.canvases.push(canvas);
-
+			this.properties.push(p);
 			var ctx = canvas.getContext('2d');
 			(Browser.Engine.presto) ? ctx.drawImage(e,0,0) : ctx.drawImage(e,0,0,p.width,p.height);
 
 		}.bind(this));
 
-
 		this.draw.delay(this.options.interval,this);
+		this.fireEvent("preload", [this.properties]);
+		this.fireEvent("change", [this.properties[this.currentIndex]]);
 	},
 
-	drawShadow: function(){
-		var canvas = new Element("canvas", {"width": 650, "height": 275, "class":"frame","styles": {"zIndex": this.sources.length + 1}});
-		canvas.inject(this.container);
-		canvas = (canvas.getContext) ? canvas : Gradually.Canvas.init(canvas);
+	onDrawMotion: function(props) {
+		var drawHeight = (props.height > 0) ? props.height : 0.01;
+		var drawWidth  = (props.width > 0) ? props.width : 0.01;
 
-		var ctx = canvas.getContext('2d');
-		ctx.beginPath();
-		var grad = ctx.createRadialGradient(650 / 2, 275 / 2, 50, 650 / 2, 275 / 2, 650);
-		grad.addColorStop(0, 'rgba(1, 0, 0, 0)');
-		grad.addColorStop(0.5, 'rgba(2, 0, 0, 1)');
-		ctx.fillStyle = grad;
-		ctx.rect(0, 0, 650, 275);
-		ctx.fill();
+		this.ctx2d.clearRect(this.x, this.y, this.width, this.height);
+		this.ctx2d.drawImage(this.source,
+			props.left, props.top,
+			drawWidth, drawHeight,
+			props.left, props.top,
+			drawWidth, drawHeight);
+	},
+
+	onDrawProgress: function() {
+		this.counter++;
+		if (this.counter >= this.total) {
+			this.counter = 0;
+			this.next();
+			this.draw.delay(this.options.interval,this);
+			this.fireEvent("change", [this.properties[this.currentIndex]]);
+		}
+	},
+
+	next: function() {
+		this.toFront();
+		this.currentIndex = (this.currentIndex < this.canvases.length - 1) ? this.currentIndex + 1 : 0;
+		return this.getCurrent();
+	},
+
+	getCurrent: function() {
+		this.current = {
+			"canvas": this.canvases[this.currentIndex],
+			"source": this.sources[this.currentIndex]
+		};
+		return this.current;
+	},
+	
+	preload: function(){
+		var preloadImages = [];
+		this.sources.each(function(e,k) {
+			preloadImages.push(e.getProperty("src"));
+		});
+		var images = new Asset.images(preloadImages, {"onComplete": this.fireEvent.bind(this, "onImagePreload")});
 	},
 
 	draw: function() {
@@ -95,7 +134,6 @@ var Gradually = new Class({
 
 		var cols = size.x / op.panelWidth; 
 		var rows = size.y / op.panelHeight;
-		this.counter = 0;
 		this.total = cols * rows;
 
 		for (var x = 0; x < cols; x++) {
@@ -123,48 +161,6 @@ var Gradually = new Class({
 		}
 	},
 
-	onDrawMotion: function(props) {
-		var drawHeight = (props.height > 0) ? props.height : 0.01;
-		var drawWidth  = (props.width > 0) ? props.width : 0.01;
-
-		this.ctx2d.clearRect(this.x, this.y, this.width, this.height);
-		this.ctx2d.drawImage(this.source,
-			props.left, props.top,
-			drawWidth, drawHeight,
-			props.left, props.top,
-			drawWidth, drawHeight);
-	},
-
-	onDrawProgress: function() {
-		this.counter++;
-		if (this.counter >= this.total) {
-			this.next();
-			this.draw.delay(this.options.interval,this);
-		}
-	},
-
-	next: function() {
-		this.toFront();
-		this.currentIndex = (this.currentIndex < this.canvases.length - 1) ? this.currentIndex + 1 : 0;
-		return this.getCurrent();
-	},
-
-	getCurrent: function() {
-		this.current = {
-			"canvas": this.canvases[this.currentIndex],
-			"source": this.sources[this.currentIndex]
-		};
-		return this.current;
-	},
-	
-	preload: function(){
-		var preloadImages = [];
-		this.sources.each(function(e,k) {
-			preloadImages.push(e.getProperty("src"));
-		});
-		var images = new Asset.images(preloadImages, {"onComplete": this.fireEvent.bind(this, "onPreload")});
-	},
-
 	toFront: function() {
 		var current = this.getCurrent();
 		var canvas	= current.canvas;
@@ -187,7 +183,7 @@ var Gradually = new Class({
 
 
 
-Gradually.Canvas = {
+Gradually.EPCanvas = {
 
 	init: function(canvas, options) {
 		return this.createCanvas(canvas, options);

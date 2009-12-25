@@ -17,22 +17,97 @@
 
 		<script type="text/javascript" src="js/uuCanvas.js"></script>
 		<script type="text/javascript">
+			Fx.Gradually = new Class({
+			
+				Extends: Fx,
+			
+				initialize: function(options){
+					this.parent(options);
+				},
+			
+				prepare: function(property, values){
+					values = $splat(values);
+					var values1 = values[1];
+					if (!$chk(values1)){
+						values[1] = values[0];
+						values[0] = values[0];
+					}
+					return {from: values[0], to: values[1]};
+				},
+			
+				compute: function(from, to, delta) {
+					this.value = {};
+					for (var p in from) { this.value[p] = this.parent(from[p], to[p], delta); }
+					this.fireEvent('motion', this.value);
+					return this.value;
+				},
+			
+				get: function(){
+					return this.value || 0;
+				},
+			
+				start: function(props) {
+					if (!this.check(props)) return this;
+					var from = {}, to = {};
+					for (var p in props) {
+						var parsed = this.prepare(p, props[p]);
+						from[p] = parsed.from;
+						to[p] = parsed.to;
+					}
+					return this.parent(from, to);
+				}
+			
+			});
+
+
+			function doMotion(props) {
+				var drawHeight = (props.height > 0) ? props.height : 0.01;
+				var drawWidth  = (props.width > 0) ? props.width : 0.01;
+		
+				this.ctx2d.clearRect(this.x, this.y, this.width, this.height);
+				this.ctx2d.drawImage(this.source,
+					props.left, props.top,
+					drawWidth, drawHeight,
+					props.left, props.top,
+					drawWidth, drawHeight);
+			}
+
+
 			var useCanvas = false;
 		    uuCanvas.ready(function() {
 				var useCanvas = true;
 				var image  = $("source").getElement("img");
 				var canvas = $("container").getElement("canvas");
 				var ctx = canvas.getContext("2d");
-				var x = 0;
-				for (var x = 0; x < 10; x++) {
-					for (var y = 0; y < 10; y++) {
-						var left = x * 65, top = y * 55;
-						try {
-							ctx.drawImage(image, left, top, 65, 55, left, top, 65, 55);
-						} catch(e) {
-						}
+
+				var cols = 650 / 65; 
+				var rows = 275 / 27.5;
+				var duration = 600;
+
+				for (var x = 0; x < cols; x++) {
+					for (var y = 0; y < rows; y++) {
+		
+						var left = x * 65, top = y * 27.5;
+						var context = {"ctx2d": ctx, "source": image, "x": left, "y": top, "width": 65, "height": 27.5}
+		
+						var fx = new Fx.Gradually({
+							"transition": "back:out",
+							"duration": duration,
+							"link": "cancel",
+							"fps": 50,
+							"onMotion": doMotion.bind(context)
+						});
+		
+						fx.start({
+							"height": [27.5,0],
+							"width": [65,0],
+							"top": [top, top + 27.5/2],
+							"left": [left,left + 65/2]}
+						);
+						duration = duration + 50;
 					}
 				}
+
 		    });
 		</script>
 	</head>

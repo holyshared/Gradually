@@ -5,36 +5,61 @@ Gradually is an experimental slide show plug-in using the canvas element.
 
 ![Screenshot](http://url_to_project_screenshot)
 
+It tells it in the beginning.:
+Please note that the explanation of this plug-in usage might be a strange content because I am not confident of English though it apologizes very much.:
+
 How to use
 ----------
 
-It often include code snippets, which are just indented pieces of text:
+A description necessary to use Gradually is as follows.:
 
-	#JS
-	var script = new MyScript()
-	script.doSomething();
+1. First of all, the markup of the container element that applies Gradually and the image used is done.:
+   In the following cases, "gradually-container" becomes an image that around and "source" use for the container.:
 
-If the first line is #JS or #CSS or #HTML, then the code is highlighted accordingly. 
+### HTML
+<div id="gradually-container" class="gradually">
+</div>
 
-Screenshots
------------
+<ul id="source" style="display: none;">
+	<li><img title="image1 title" alt="image1 discription" src="images/demo1.jpg" width="650" height="275" /></li>
+	<li><img title="image2 title" alt="image2 discription" src="images/demo2.jpg" width="650" height="275" /></li>
+	<li><img title="image3 title" alt="image3 discription" src="images/demo1.jpg" width="650" height="275" /></li>
+	<li><img title="image4 title" alt="image4 discription" src="images/demo2.jpg" width="650" height="275" /></li>
+	<li><img title="image5 title" alt="image5 discription" src="images/demo1.jpg" width="650" height="275" /></li>
+	<li><img title="image6 title" alt="image6 discription" src="images/demo2.jpg" width="650" height="275" /></li>
+</ul>
 
-This section is optional, but encouraged if the plugin affords it. Just a list of images, one per line. We do the resizing, so use actual size screenshots.
+2. Javascript is this time described when injuring with the mark with html and ending.:
+   "gradually-container", "source", and the option that was marked and put up ahead are specified for an argument.:
 
-![Screenshot 1](http://url_to_project_screenshot)
-![Screenshot 2](http://url_to_project_screenshot)
-![Screenshot 3](http://url_to_project_screenshot)
-![Screenshot 4](http://url_to_project_screenshot)
+### JavaScript
+var container = null, sources = null;
+var options = {
+	'panelHeight': 55,
+	'panelWidth': 65,
+	'interval': 3000,
+	'duration': 800,
+	'zIndex': 9000
+};
 
-Arbitrary section
------------------
+var container	= $("gradually-container");
+var sources		= $("source").getElements("li img");
 
-This is an arbitrary section. You can have as many of these as you want.
-Some arbitrary section examples:
+new Gradually(container, sources, options);
 
-* FAQ
-* Notes
-* Misc
-* Known issues
 
-The name is up to you, but remember to keep it meaningful and simple. Arbitrary sections are always optional.
+Options
+-------
+
+All options have default values assigned, hence are optional.
+
+### Version 1.0
+
+* **panelHeight**: (int) Height of divided panel.
+* **panelWidth**: (int) Width of divided panel.
+* **interval**: (int) Interval when image is switched.
+* **duration**: (int) duration of animation.
+* **zIndex**: (int) starting position of layer.
+* **onStart**: When the slide show is begun, it is generated.
+* **onPreload**: When reading the image is completed, it is generated.
+* **onChange**: when the image changes, it is generated.
