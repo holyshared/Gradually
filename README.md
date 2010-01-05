@@ -18,10 +18,7 @@ A description necessary to use Gradually is as follows.
    In the following cases, "gradually-container" becomes an image that around and "source" use for the container.
 
 ### HTML
-	<div id="gradually-container" class="gradually">
-	</div>
-
-	<ul id="source" style="display: none;">
+	<ul id="gradually-container" class="gradually">
 		<li><img title="image1 title" alt="image1 discription" src="images/demo1.jpg" width="650" height="275" /></li>
 		<li><img title="image2 title" alt="image2 discription" src="images/demo2.jpg" width="650" height="275" /></li>
 		<li><img title="image3 title" alt="image3 discription" src="images/demo1.jpg" width="650" height="275" /></li>
@@ -44,7 +41,7 @@ A description necessary to use Gradually is as follows.
 	};
 
 	var container	= $("gradually-container");
-	var sources		= $("source").getElements("li img");
+	var sources		= $("gradually-container").getElements("li img");
 
 	new Gradually(container, sources, options);
 

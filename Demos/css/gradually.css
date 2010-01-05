@@ -7,7 +7,9 @@ div#container {
 }
 
 .gradually {
+	list-style: none;
 	margin: 0px;
+	padding: 0px;
 	height: 275px;
 }
 
@@ -17,9 +19,8 @@ div#container {
 	padding: 0px;
 }
 
-.gradually .frame {
-	position: absolute;
-	margin: 0px auto;
+.gradually li {
+	text-align:left;
 }
 
 p.information {

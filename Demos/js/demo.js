@@ -18,7 +18,7 @@ window.addEvent("domready", function(){
 	};
 	
 	var container	= $("gradually-container");
-	var sources		= $("source").getElements("li img");
+	var sources		= $("gradually-container").getElements("li img");
 	new Gradually(container, sources, options);
 	
 });

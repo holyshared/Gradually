@@ -63,7 +63,9 @@ var Gradually = new Class({
 				"class": "source",
 				"styles": { "zIndex": zIndex-- }
 			});
-			canvas.inject(this.container);
+//			canvas.inject(this.container);
+			e.setStyle("display", "none");
+			canvas.inject(e.parentNode);
 			canvas = (canvas.getContext) ? canvas : Gradually.EPCanvas.init(canvas,this.options);
 			this.canvases.push(canvas);
 			this.properties.push(p);
