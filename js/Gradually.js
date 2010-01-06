@@ -119,10 +119,11 @@ var Gradually = new Class({
 		var preloadImages = [];
 		this.sources.each(function(e,k) {
 			preloadImages.push(e.getProperty("src"));
+			e.setStyle("display", "none");
 		});
 		var images = new Asset.images(preloadImages, {
-			"onProgress": function(p,key){ 
-				this.fireEvent("progress", [p,key]);
+			"onProgress": function(p,k){ 
+				this.fireEvent("progress", [p,k]);
 			}.bind(this),
 			"onComplete": this.fireEvent.bind(this, "onImagePreload")});
 	},

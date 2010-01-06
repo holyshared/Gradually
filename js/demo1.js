@@ -6,6 +6,8 @@ window.addEvent("domready", function(){
 	var loadingbar		  = $("container").getElement("p.progressbar");
 	var info	= $("container").getElement("p.information");
 
+	info.setStyle("display", "none");
+
 	var progressBar = new MoogressBar({
 		bgImage: 'images/progressbar/blue.gif',
 		parent_el: loadingbar,
@@ -19,10 +21,11 @@ window.addEvent("domready", function(){
 		'duration': 800,
 		'zIndex': 9000,
 		'onStart': function() {
-			info.set("html", "now loading....");
+			progressBar.setPercentage(0);
 		},
 		'onPreload': function(images) {
-			info.set("html", images.length.toString() + "loaded");
+				info.setStyle("display", "");
+				info.set("html", images.length.toString() + "loaded");
 		},
 		'onProgress': function(counter, index) {
 			var loaded = counter + 1;
