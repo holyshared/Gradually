@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+div#container {
+	width: 650px;
+	padding: 10px 10px 0px 10px;
+	margin: 0px;
+	background: #000000;
+}
+
+.gradually {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	height: 275px;
+}
+
+.gradually .source {
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+}
+
+.gradually li {
+	text-align:left;
+}
+
+p.information {
+	background: #000000;
+	text-align: right;
+	color: #ffffff;
+	padding: 5px 10px 10px 10px;
+}

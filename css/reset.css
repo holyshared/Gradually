@@ -1,0 +1,87 @@
+@charset "UTF-8";
+
+/* Universal
+------------------------------*/
+* {
+	font-family: Georgia;
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	text-align: center;
+	font-size: 62.5%;
+	color: #666666;
+}
+
+/* Headline
+------------------------------*/
+h1 {
+	font-size: 2.5em;
+	font-weight: normal;
+}
+
+h2 {
+	font-size: 1.6em;
+	font-weight: normal;
+}
+
+h3 {
+	font-size: 1.4em;
+	font-weight: normal;
+}
+
+p,
+ol, ul,
+dl dt, dl dd,
+table th, table td {
+	font-size: 1.4em;
+	line-height: 140%;
+}
+
+p {
+	margin-bottom: 15px;
+}
+
+
+table {
+	border: 1px solid #cccccc;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table th {
+	padding: 10px 10px;
+	border: 1px dotted #cccccc;
+	background: url(../images/share/bgi_table_header.gif) left top;
+}
+
+table td {
+	padding: 10px 10px;
+	border: 1px dotted #cccccc;
+}
+
+
+
+a, span, em, strong, input, textarea, label {
+	font-size: 100%;
+}
+
+/* Anchor
+------------------------------*/
+a:link {
+	color: #003366;
+}
+
+a:visit {
+	color: #FF6600;
+}
+
+a:hover {
+	color: #FF9900;
+}
+
+img {
+	border: none;
+	vertical-align: bottom;
+}

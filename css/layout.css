@@ -1,0 +1,10 @@
+@charset "utf-8";
+
+div#warpper {
+	width: 670px;
+	margin: 20px auto;
+}
+
+dl.properties {
+	margin-bottom: 15px;
+}
