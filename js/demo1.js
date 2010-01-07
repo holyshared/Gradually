@@ -1,7 +1,7 @@
 SyntaxHighlighter.config.clipboardSwf = 'js/libraries/highlighter/clipboard.swf';
 SyntaxHighlighter.all();
 
-window.addEvent("domready", function(){
+window.addEvent("load", function(){
 
 	var container	= null, sources = null, size = null, position = null, dHeight = null;
 	var container	= $("gradually-container");
