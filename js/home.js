@@ -1,3 +1,6 @@
+SyntaxHighlighter.config.clipboardSwf = 'js/libraries/highlighter/clipboard.swf';
+SyntaxHighlighter.all();
+
 window.addEvent("domready", function(){
 
 	var container = null, sources = null;

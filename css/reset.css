@@ -17,18 +17,21 @@ body {
 /* Headline
 ------------------------------*/
 h1 {
-	font-size: 2.5em;
+	font-size: 4.0em;
 	font-weight: normal;
+	margin-bottom: 10px;
 }
 
 h2 {
 	font-size: 1.6em;
-	font-weight: normal;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #cccccc;
+	padding-bottom: 5px;
 }
 
 h3 {
 	font-size: 1.4em;
-	font-weight: normal;
+	margin-bottom: 5px;
 }
 
 p,
@@ -43,6 +46,9 @@ p {
 	margin-bottom: 15px;
 }
 
+ul {
+	margin-left: 15px;
+}
 
 table {
 	border: 1px solid #cccccc;

@@ -3,7 +3,7 @@
 div#container {
 	width: 650px;
 	padding: 10px 10px 0px 10px;
-	margin: 0px;
+	margin: 0px 0px 10px 0px;
 	background: #000000;
 }
 
@@ -29,4 +29,5 @@ p.information {
 	text-align: right;
 	color: #ffffff;
 	padding: 5px 10px 10px 10px;
+	margin-bottom: 0px;
 }

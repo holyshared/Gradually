@@ -3,8 +3,76 @@
 div#warpper {
 	width: 670px;
 	margin: 20px auto;
+	text-align: left;
 }
 
 dl.properties {
 	margin-bottom: 15px;
+	padding: 15px 15px 0px 15px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border: 1px solid #cccccc;}
+
+dl.properties dt {
+	float: left;
+	clear: both;
+	width: 150px;
+	margin-bottom: 10px;
+	border-right: 2px solid #cccccc;
+}
+
+dl.properties dd {
+	margin-bottom: 10px;
+	padding-left: 15px;
+	margin-left: 150px;
+}
+
+
+
+div.section {
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border: 1px solid #cccccc;
+	padding: 15px;
+	margin-bottom: 30px;
+}
+
+div.section div.section {
+	margin-bottom: 15px;
+}
+
+
+ul.navigation {
+	overflow: hidden;
+	margin-bottom: 15px;
+}
+
+ul.navigation li {
+	float: left;
+	margin-right: 10px;
+}
+
+ul.navigation li a,
+ul.navigation li strong {
+	float: left;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 5px 20px;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+ul.navigation li a {
+	color: #ffffff;
+	background: #cccccc;
+}
+
+ul.navigation li a:hover,
+ul.navigation li strong {
+	color: #ffffff;
+	background: #3792af;
+}
+
+p#copyright {
+	text-align:center;
 }
