@@ -3,14 +3,10 @@ SyntaxHighlighter.all();
 
 window.addEvent("domready", function(){
 
-	var container	= null, sources = null;
+	var container	= null, sources = null, size = null, position = null, dHeight = null;
 	var container	= $("gradually-container");
 	var sources		= $("gradually-container").getElements("li img");
 	var information = $("container").getElement("p.information");
-
-	var size		= container.getSize();
-	var position	= container.getPosition();
-	var dHeight		= information.getSize().y;
 
 	var options = {
 		'panelHeight': 55,
@@ -19,6 +15,9 @@ window.addEvent("domready", function(){
 		'duration': 800,
 		'zIndex': 9000,
 		'onStart': function() {
+			size		= container.getSize();
+			position	= container.getPosition();
+			dHeight		= information.getSize().y;
 
 			information.setStyles({
 				"position": "absolute",
