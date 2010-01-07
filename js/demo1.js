@@ -12,14 +12,6 @@ window.addEvent("domready", function(){
 	var position	= container.getPosition();
 	var dHeight		= information.getSize().y;
 
-	information.setStyles({
-		"position": "absolute",
-		"left": position.x - 1, "top": position.y + size.y - dHeight,
-		"width": size.x - 10, "height": 0,
-		"zIndex": 20000,
-		"opacity": 0.8
-	});
-
 	var options = {
 		'panelHeight': 55,
 		'panelWidth': 65,
@@ -27,6 +19,15 @@ window.addEvent("domready", function(){
 		'duration': 800,
 		'zIndex': 9000,
 		'onStart': function() {
+
+			information.setStyles({
+				"position": "absolute",
+				"left": position.x - 1, "top": position.y + size.y - dHeight,
+				"width": size.x - 10, "height": 0,
+				"zIndex": 20000,
+				"opacity": 0.8
+			});
+
 			information.set("html", "now loading....");
 		},
 		'onChange': function(image) {
