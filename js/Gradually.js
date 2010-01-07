@@ -55,7 +55,7 @@ var Gradually = new Class({
 	},
 
 	onImagePreload: function() {
-		var zIndex = this.sources.length;
+		var zIndex = this.sources.length + this.options.zIndex;
 		this.sources.each(function(e,k) {
 			var p = e.getProperties("width", "height", "title", "alt", "src");
 			var canvas = new Element("canvas", {
@@ -173,7 +173,7 @@ var Gradually = new Class({
 		var canvas	= current.canvas;
 		var source	= current.source;
 
-		canvas.setStyle("zIndex", 1);
+		canvas.setStyle("zIndex", this.options.zIndex);
 		var ctx = canvas.getContext('2d');
 		ctx.drawImage(source,0,0);
 
