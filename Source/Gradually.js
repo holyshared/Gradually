@@ -36,6 +36,7 @@ var Gradually = new Class({
 /*
 		'onStart': $empty,
 		'onPreload': $empty,
+		'onProgress': $empty,
 		'onChange': $empty
 */
 	},
@@ -63,7 +64,6 @@ var Gradually = new Class({
 				"class": "source",
 				"styles": { "zIndex": zIndex-- }
 			});
-//			canvas.inject(this.container);
 			e.setStyle("display", "none");
 			canvas.inject(e.parentNode);
 			canvas = (canvas.getContext) ? canvas : Gradually.EPCanvas.init(canvas,this.options);
@@ -119,8 +119,13 @@ var Gradually = new Class({
 		var preloadImages = [];
 		this.sources.each(function(e,k) {
 			preloadImages.push(e.getProperty("src"));
+			e.setStyle("display", "none");
 		});
-		var images = new Asset.images(preloadImages, {"onComplete": this.fireEvent.bind(this, "onImagePreload")});
+		var images = new Asset.images(preloadImages, {
+			"onProgress": function(p,k){ 
+				this.fireEvent("progress", [p,k]);
+			}.bind(this),
+			"onComplete": this.fireEvent.bind(this, "onImagePreload")});
 	},
 
 	draw: function() {
