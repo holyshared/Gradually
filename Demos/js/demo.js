@@ -1,10 +1,11 @@
 window.addEvent("domready", function(){
+
 	var container = null, sources = null;
 	var options = {
 		'panelHeight': 55,
 		'panelWidth': 65,
 		'interval': 3000,
-		'duration': 800,
+		'duration': 1000,
 		'zIndex': 9000,
 		'onStart': function() {
 			$("container").getElement("p.information").set("html", "now loading....");
@@ -18,7 +19,7 @@ window.addEvent("domready", function(){
 	};
 	
 	var container	= $("gradually-container");
-	var sources		= $("gradually-container").getElements("li img");
+	var sources		= $("gradually-container").getElements("img");
 	new Gradually(container, sources, options);
 	
 });

@@ -32,11 +32,10 @@ var Gradually = new Class({
 		'panelWidth': 65,
 		'interval': 3000,
 		'duration': 30,
-		'zIndex': 9000,
+		'zIndex': 9000
 /*
 		'onStart': $empty,
 		'onPreload': $empty,
-		'onProgress': $empty,
 		'onChange': $empty
 */
 	},
@@ -121,11 +120,7 @@ var Gradually = new Class({
 			preloadImages.push(e.getProperty("src"));
 			e.setStyle("display", "none");
 		});
-		var images = new Asset.images(preloadImages, {
-			"onProgress": function(p,k){ 
-				this.fireEvent("progress", [p,k]);
-			}.bind(this),
-			"onComplete": this.fireEvent.bind(this, "onImagePreload")});
+		var images = new Asset.images(preloadImages, {"onComplete": this.fireEvent.bind(this, "onImagePreload")});
 	},
 
 	draw: function() {
@@ -163,7 +158,7 @@ var Gradually = new Class({
 					"top": [top, top + op.panelHeight/2],
 					"left": [left,left + op.panelWidth/2]}
 				);
-				duration = duration + 50;
+				duration = duration + 70;
 			}
 		}
 	},

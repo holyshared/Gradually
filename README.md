@@ -14,8 +14,8 @@ How to use
 
 A description necessary to use Gradually is as follows.
 
-* First of all, the markup of the container element that applies Gradually and the image used is done.
-   In the following cases, "gradually-container" becomes an image that around and "source" use for the container.
+HTML to use Gradually is described in the beginning. 
+HTML is as follows. 
 
 ### HTML
 	<ul id="gradually-container" class="gradually">
@@ -27,8 +27,9 @@ A description necessary to use Gradually is as follows.
 		<li><img title="image6 title" alt="image6 discription" src="images/demo2.jpg" width="650" height="275" /></li>
 	</ul>
 
-* Javascript is this time described when injuring with the mark with html and ending.
-   "gradually-container", "source", and the option that was marked and put up ahead are specified for an argument.
+Next, javascript is described. 
+The element and the image that plays the role of the container are specified. 
+The option is specified now.
 
 ### JavaScript
 	var container = null, sources = null;
@@ -51,7 +52,7 @@ Options
 
 All options have default values assigned, hence are optional.
 
-### Version 1.0
+### Version 0.1
 
 * **panelHeight**: (int) Height of divided panel.
 * **panelWidth**: (int) Width of divided panel.
@@ -59,5 +60,6 @@ All options have default values assigned, hence are optional.
 * **duration**: (int) duration of animation.
 * **zIndex**: (int) starting position of layer.
 * **onStart**: When the slide show is begun, it is generated.
-* **onPreload**: When reading the image is completed, it is generated.
+* **onPreload**: When reading all images is completed, it is generated.
+* **onProgress**: When reading the image is completed, it is generated.
 * **onChange**: when the image changes, it is generated.
