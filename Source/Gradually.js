@@ -8,19 +8,20 @@ authors:
 - Noritaka Horio
 
 requires:
-  core/1.2.4:
-  - Core/*
-  - Native/*
-  - Class/*
-  - Element/*
-  - Utilities/Selecter
-  - Utilities/DomReady
-  - Fx/Fx
-  more/1.2.4.2:
-  - Assets
+    core/1.2.4:
+    - Core/*
+    - Native/*
+    - Class/*
+    - Element/*
+    - Utilities/Selecter
+    - Utilities/DomReady
+    - Fx/Fx
+    more/1.2.4.2:
+    - Assets
 
 provides: [Gradually]
 
+...
 */
 
 var Gradually = new Class({
