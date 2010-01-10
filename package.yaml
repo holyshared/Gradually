@@ -1,7 +1,7 @@
 name: Gradually
 author: holy
 category: Widgets
-tags: [gallery]
+tags: [gallery,canvas,slideshow]
 #docs: http://url.to.docs
 demo: http://holy.github.com/Gradually/
-current: 0.1
+current: 1.0

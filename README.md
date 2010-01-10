@@ -52,7 +52,7 @@ Options
 
 All options have default values assigned, hence are optional.
 
-### Version 0.1
+### Version 1.0
 
 * **panelHeight**: (int) Height of divided panel.
 * **panelWidth**: (int) Width of divided panel.
