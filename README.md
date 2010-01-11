@@ -17,7 +17,7 @@ A description necessary to use Gradually is as follows.
 HTML to use Gradually is described in the beginning. 
 HTML is as follows. 
 
-### HTML
+	#HTML
 	<ul id="gradually-container" class="gradually">
 		<li><img title="image1 title" alt="image1 discription" src="images/demo1.jpg" width="650" height="275" /></li>
 		<li><img title="image2 title" alt="image2 discription" src="images/demo2.jpg" width="650" height="275" /></li>
@@ -31,7 +31,7 @@ Next, javascript is described.
 The element and the image that plays the role of the container are specified. 
 The option is specified now.
 
-### JavaScript
+	#JS
 	var container = null, sources = null;
 	var options = {
 		'panelHeight': 55,
