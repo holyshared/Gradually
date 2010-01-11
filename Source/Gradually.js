@@ -4,7 +4,7 @@ description: Gradually is an experimental slide show plug-in using the canvas el
 license: MIT-style
 authors: Noritaka Horio
 requires:
-    core/1.2.4:
+  core/1.2.4:
     - Core/*
     - Native/*
     - Class/*
@@ -12,7 +12,7 @@ requires:
     - Utilities/Selecter
     - Utilities/DomReady
     - Fx/Fx
-    more/1.2.4.2:
+  more/1.2.4.2:
     - Assets
 provides: [Gradually]
 ...

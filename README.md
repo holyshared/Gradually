@@ -3,7 +3,7 @@ Gradually
 
 Gradually is an experimental slide show plug-in using the canvas element.
 
-[Screenshot](http://holyshared.github.com/Gradually/snapshot.png)
+![Screenshot](http://holyshared.github.com/Gradually/snapshot.png)
 
 It tells it in the beginning.
 
