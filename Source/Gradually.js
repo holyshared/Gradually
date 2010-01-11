@@ -10,21 +10,21 @@ authors:
 requires:
   core/1.2.4:
   - Core/Core
-  - Core/Browser,
-  - Native/Array,
-  - Native/Function,
-  - Native/Number,
-  - Native/String,
-  - Native/Hash,
-  - Native/Event,
-  - Class/Class,
-  - Class/Class.Extras,
-  - Element/Element,
-  - Element/Element.Event,
-  - Element/Element.Style,
-  - Element/Element.Dimensions,
-  - Utilities/Selecter,
-  - Utilities/DomReady,
+  - Core/Browser
+  - Native/Array
+  - Native/Function
+  - Native/Number
+  - Native/String
+  - Native/Hash
+  - Native/Event
+  - Class/Class
+  - Class/Class.Extras
+  - Element/Element
+  - Element/Element.Event
+  - Element/Element.Style
+  - Element/Element.Dimensions
+  - Utilities/Selecter
+  - Utilities/DomReady
   - Fx/Fx
   more/1.2.4.2:
   - Assets
