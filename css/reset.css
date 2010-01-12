@@ -67,8 +67,6 @@ table td {
 	border: 1px dotted #cccccc;
 }
 
-
-
 a, span, em, strong, input, textarea, label {
 	font-size: 100%;
 }
@@ -90,4 +88,8 @@ a:hover {
 img {
 	border: none;
 	vertical-align: bottom;
+}
+
+pre {
+	font-size: 100%;
 }

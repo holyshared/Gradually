@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Gradually - Gradually is an experimental slide show plug-in using the canvas element.</title>
-		<meta name="description" content="Gradually is an experimental slide show plug-in using the canvas element." />
+		<meta name="description" content="Gradually is an experimental slide show plugin using the canvas element." />
 		<meta name="keywords" content="mootools,plugin,github,Gradually,forge,javascript,library" />
 		<link rel="index" title="Gradually" href="http://holy.github.com/Gradually/" />
 		<link rel="start" title="Gradually Home" href="http://holy.github.com/Gradually/" />
@@ -41,10 +41,12 @@
 				</ul>
 				<p class="information">&nbsp;</p>
 			</div>
+
 			<ul class="navigation">
 				<li><strong>home</strong></li>
-				<li><a href="demo1.html">demonstration</a></li>
+				<li><a title="Demonstration" href="demo1.html">demonstration</a></li>
 			</ul>
+
 			<dl class="properties">
 				<dt>github@repository</dt>
 				<dd><a title="github@repository" href="http://github.com/holy/Gradually">http://github.com/holy/Gradually</a></dd>
@@ -64,16 +66,64 @@
 				<div class="section">
 					<h3>HTML</h3>
 					<pre class="brush: xml">
-						&lt;ul id="gradually-container" class="gradually"&gt;
-							&lt;li&gt;&lt;img title="image1 title" alt="image1 discription" src="images/demo1.jpg" width="650" height="275" /&gt;&lt;/li&gt;
-							&lt;li&gt;&lt;img title="image2 title" alt="image2 discription" src="images/demo2.jpg" width="650" height="275" /&gt;&lt;/li&gt;
-							&lt;li&gt;&lt;img title="image3 title" alt="image3 discription" src="images/demo1.jpg" width="650" height="275" /&gt;&lt;/li&gt;
-							&lt;li&gt;&lt;img title="image4 title" alt="image4 discription" src="images/demo2.jpg" width="650" height="275" /&gt;&lt;/li&gt;
-							&lt;li&gt;&lt;img title="image5 title" alt="image5 discription" src="images/demo1.jpg" width="650" height="275" /&gt;&lt;/li&gt;
-							&lt;li&gt;&lt;img title="image6 title" alt="image6 discription" src="images/demo2.jpg" width="650" height="275" /&gt;&lt;/li&gt;
-						&lt;/ul&gt;
+&lt;div id="container"&gt;
+	&lt;ul id="gradually-container" class="gradually"&gt;
+		&lt;li&gt;&lt;img title="image1 title" alt="image1 discription" src="images/demo1.jpg" width="650" height="275" /&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;img title="image2 title" alt="image2 discription" src="images/demo2.jpg" width="650" height="275" /&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;img title="image3 title" alt="image3 discription" src="images/demo1.jpg" width="650" height="275" /&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;img title="image4 title" alt="image4 discription" src="images/demo2.jpg" width="650" height="275" /&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;img title="image5 title" alt="image5 discription" src="images/demo1.jpg" width="650" height="275" /&gt;&lt;/li&gt;
+		&lt;li&gt;&lt;img title="image6 title" alt="image6 discription" src="images/demo2.jpg" width="650" height="275" /&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
 					</pre>
 				</div>
+
+
+				<p>The css style becomes the following descriptions.</p>
+
+				<div class="section">
+					<h3>CSS</h3>
+					<pre class="brush: css">
+div#container {
+	width: 650px;
+	padding: 10px 10px 0px 10px;
+	margin: 0px 0px 10px 0px;
+	background: #000000;
+}
+
+.gradually {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	height: 275px;
+}
+
+.gradually .source {
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+}
+
+.gradually li {
+	text-align:left;
+	margin: 0px;
+	padding: 0px;
+	width: 0px;
+	height: 0px;
+	display: inline;
+}
+
+p.information {
+	background: #000000;
+	text-align: right;
+	color: #ffffff;
+	padding: 5px 10px 10px 10px;
+	margin-bottom: 0px;
+}
+					</pre>
+				</div>
+
 				
 				<p>Javascript is this time described when injuring with the mark with html and ending.<br />
 				"gradually-container", "source", and the option that was marked and put up ahead are specified for an argument.</p>
@@ -118,6 +168,10 @@
 			</div>
 
             <div id="footer">
+				<ul class="navigation">
+					<li><a title="Home" href="index.html">home</a></li>
+					<li><a title="Demonstration" href="demo1.html">demonstration</a></li>
+				</ul>
 				<p id="copyright">Copyright 2010 <a title="Noritaka Horio personal blog" href="http://sharedhat.com/">Noritaka Horio</a> All rights reserved.</p>
             </div>
 		</div>

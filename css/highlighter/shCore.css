@@ -54,7 +54,7 @@
 	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace !important;
 	font-weight: normal !important;
 	font-style: normal !important;
-	font-size: 1em !important;
+	font-size: 105% !important;
 	min-height: inherit !important; /* For IE8, FF & WebKit */
 	min-height: auto !important; /* For IE7 */
 }
@@ -165,7 +165,7 @@
 
 .syntaxhighlighter.collapsed .toolbar
 {
-	font-size: 80% !important;
+	font-size: 100% !important;
 	padding: .2em 0 .5em .5em !important;
 	position: static !important;
 }
