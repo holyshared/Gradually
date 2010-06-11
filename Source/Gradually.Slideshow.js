@@ -38,7 +38,7 @@ var Gradually.Slideshow = new Class({
 
 	Implements: [Events, Options],
 
-	initialize: function (container,sources,options) {
+	initialize: function (container, sources, options) {
 	}
 
 });
