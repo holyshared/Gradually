@@ -1,0 +1,5 @@
+start
+stop
+toggle
+next
+prev

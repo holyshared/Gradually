@@ -15,72 +15,7 @@
 		<script type="text/javascript" src="js/libraries/canvas/Layer.js"></script>
 		<script type="text/javascript" src="js/libraries/canvas/LayerHash.js"></script>
 		<script type="text/javascript" src="js/libraries/canvas/CanvasItem.js"></script>
-		<script type="text/javascript">
-			window.addEvent("domready", function() {
-
-				var onDraw = function(ctx) {
-					ctx.clearRect(props.x, props.y, props.width, props.height);
-					ctx.drawImage(props.source,
-						props.x, props.y, props.width, props.height,
-						props.x, props.y, props.width, props.height);
-		        }
-
-				var onDrawMotion = function(ctx) {
-					var fx = new Fx.Gradually({
-						"transition": "back:out",
-						"duration": 600,
-						"link": "cancel",
-						"fps": 30,
-						"onMotion": this.onDrawMotion.bind(context),
-						"onComplete": this.onDrawProgress.bind(this)
-					});
-	
-					fx.start({
-						"height": [50,0],
-						"width": [50,0],
-						"top": [top, top + 50/2],
-						"left": [left,left + 50/2]}
-					);
-					duration = duration + 70;
-				}
-
-				var image = new Asset.image('images/demo1.jpg', {"id": "demo",
-					'onload': function() {
-
-
-
-
-
-//width: 650, height: 257
-
-		var cols = 650 / 50; 
-		var rows = 257 / 50;
-		var total = cols * rows;
-
-		for (var x = 0; x < cols; x++) {
-			for (var y = 0; y < rows; y++) {
-				var left = x * 50, top = y * 50;
-				var context = {"ctx2d": ctx, "source": source, "x": left, "y": top, "width": 50, "height": 50}
-			}
-		}
-
-						var props = {"source": image, x: 0, y: 0, width: 650, height: 257};
-
-						var canvas = new Element("canvas", {"height": "257", "width": 650});
-						canvas.inject($("canvasContainer"));
-		
-				        CANVAS.init({'canvasElement' : canvas});
-						CANVAS.layers.add(new Layer({'id' : 'master'}));
-
-		            	CANVAS.layers.get('master').add(new CanvasItem({id : 'item-1', 'events': {'onDraw': onDraw}}));
-						CANVAS.draw();
-		            //	CANVAS.layers.get('master').add(new CanvasItem({id : 'item-1'}));
-					}		
-				});
-
-
-			});
-		</script>
+		<script type="text/javascript" src="js/test.js"></script>
 		<style type="text/css">
 			canvas {
 				border: 5px solid #cccccc;
