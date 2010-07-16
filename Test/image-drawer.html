@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>ImageDrawer</title>
+		<meta name="keywords" content="mootools,demo,javascript,animation,canvas" />
+		<meta name="description" content="" />
+		<meta name="author" content="Noritaka Horio" />
+		<meta name="copyright" content="2009 Noritaka Horio All rights reserved" />
+		<link rel="stylesheet" type="text/css" href="../Demos/css/reset.css" media="screen,print" />
+		<link rel="stylesheet" type="text/css" href="../Demos/css/gradually.css" media="screen,print" />
+		<style type="text/css">
+			.container {
+				background: #000000;
+			}
+		</style>
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4.2-more.js"></script>
+		<script type="text/javascript" src="../Source/ImageDrawer.js"></script>
+		<script type="text/javascript">
+			window.addEvent("domready", function() {
+				var log = document.id("log");
+
+				//
+
+				var drawLeft = document.id("drawLeft");
+				drawLeft.addEvent("click", function() {
+
+					var image1 = new Image();
+					image1.src = "images/demo1.jpg";
+					image1.onload = function() {
+						var left = document.id("left");
+						left.setProperties({
+							'width': image1.width,
+							'height': image1.height
+						});
+	
+						var container = left.getParent();
+						container.setStyles({
+							'width': image1.width,
+							'height': image1.height
+						});
+	
+						var drawer = new ImageDrawer.Square(left, {
+							'source': image1,
+							'height': 55,
+							'width': 65,
+							'duration': 30,
+							'onDrawStart': function() { log.set("html", "Start"); },
+							'onDrawComplete': function() { log.set("html", "Complete"); }
+						});
+						drawer.drawLeft();
+					}
+
+				});
+
+				var drawRight = document.id("drawRight");
+				drawRight.addEvent("click", function() {
+					var image2 = new Image();
+					image2.src = "images/demo2.jpg";
+					image2.onload = function(event) {
+						var right = document.id("right");
+						right.setProperties({
+							'width': image2.width,
+							'height': image2.height
+						});
+	
+						var container = right.getParent();
+						container.setStyles({
+							'width': image2.width,
+							'height': image2.height
+						});
+	
+						var drawer = new ImageDrawer.Square(right, {
+							'source': image2,
+							'height': 55,
+							'width': 65,
+							'duration': 1000,
+							'onDrawStart': function() { log.set("html", "Start"); },
+							'onDrawComplete': function() { log.set("html", "Complete"); }
+						});
+						drawer.drawRight();
+					}
+				});
+
+
+				var drawTop = document.id("drawTop");
+				drawTop.addEvent("click", function() {
+					var image2 = new Image();
+					image2.src = "images/demo2.jpg";
+					image2.onload = function(event) {
+						var top = document.id("top");
+						top.setProperties({
+							'width': image2.width,
+							'height': image2.height
+						});
+	
+						var container = top.getParent();
+						container.setStyles({
+							'width': image2.width,
+							'height': image2.height
+						});
+	
+						var drawer = new ImageDrawer.Square(top, {
+							'source': image2,
+							'height': 55,
+							'width': 65,
+							'duration': 1000,
+							'onDrawStart': function() { log.set("html", "Start"); },
+							'onDrawComplete': function() { log.set("html", "Complete"); }
+						});
+						drawer.drawTop();
+					}
+				});
+
+				var drawBottom = document.id("drawBottom");
+				drawBottom.addEvent("click", function() {
+					var image2 = new Image();
+					image2.src = "images/demo2.jpg";
+					image2.onload = function(event) {
+						var bottom = document.id("bottom");
+						bottom.setProperties({
+							'width': image2.width,
+							'height': image2.height
+						});
+	
+						var container = bottom.getParent();
+						container.setStyles({
+							'width': image2.width,
+							'height': image2.height
+						});
+	
+						var drawer = new ImageDrawer.Square(bottom, {
+							'source': image2,
+							'height': 55,
+							'width': 65,
+							'duration': 1000,
+							'onDrawStart': function() { log.set("html", "Start"); },
+							'onDrawComplete': function() { log.set("html", "Complete"); }
+						});
+						drawer.drawBottom();
+					}
+				});
+
+
+
+			});
+		</script>
+	</head>
+	<body>
+		<div id="warpper">
+			<h1>Canvas</h1>
+			<ul>
+				<li><a id="drawLeft" href="#left">left</a></li>
+				<li><a id="drawRight" href="#right">right</a></li>
+				<li><a id="drawTop" href="#top">top</a></li>
+				<li><a id="drawBottom" href="#bottom">bottom</a></li>
+			</ul>
+			<div class="container"><canvas id="left"></canvas></div>
+			<div class="container"><canvas id="right"></canvas></div>
+			<div class="container"><canvas id="top"></canvas></div>
+			<div class="container"><canvas id="bottom"></canvas></div>
+			<p id="log"></p>
+	    </div>
+	</body>
+</html> 
