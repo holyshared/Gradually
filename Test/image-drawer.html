@@ -20,9 +20,6 @@
 		<script type="text/javascript">
 			window.addEvent("domready", function() {
 				var log = document.id("log");
-
-				//
-
 				var drawLeft = document.id("drawLeft");
 				drawLeft.addEvent("click", function() {
 
@@ -41,14 +38,19 @@
 							'height': image1.height
 						});
 	
-						var drawer = new ImageDrawer.Square(left, {
-							'source': image1,
+						var drawer = new ImageDrawer.Square({
+/*							'canvas': left,
+							'source': image1, */
 							'height': 55,
 							'width': 65,
+							'transition': 'expo:in:out',
 							'duration': 30,
 							'onDrawStart': function() { log.set("html", "Start"); },
 							'onDrawComplete': function() { log.set("html", "Complete"); }
 						});
+
+						drawer.setCanvas(left);
+						drawer.setImage(image1);
 						drawer.drawLeft();
 					}
 
@@ -71,14 +73,20 @@
 							'height': image2.height
 						});
 	
-						var drawer = new ImageDrawer.Square(right, {
-							'source': image2,
+						var drawer = new ImageDrawer.Square({
+//							'canvas': right,
+//							'source': image2,
+							'transition': 'back:in:out',
 							'height': 55,
 							'width': 65,
 							'duration': 1000,
 							'onDrawStart': function() { log.set("html", "Start"); },
 							'onDrawComplete': function() { log.set("html", "Complete"); }
 						});
+
+						drawer.setCanvas(right);
+						drawer.setImage(image2);
+
 						drawer.drawRight();
 					}
 				});
@@ -101,7 +109,8 @@
 							'height': image2.height
 						});
 	
-						var drawer = new ImageDrawer.Square(top, {
+						var drawer = new ImageDrawer.Square({
+							'canvas': top,
 							'source': image2,
 							'height': 55,
 							'width': 65,
@@ -130,7 +139,8 @@
 							'height': image2.height
 						});
 	
-						var drawer = new ImageDrawer.Square(bottom, {
+						var drawer = new ImageDrawer.Square({
+							'canvas': bottom,
 							'source': image2,
 							'height': 55,
 							'width': 65,

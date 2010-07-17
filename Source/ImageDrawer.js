@@ -45,26 +45,34 @@ var ImageDrawer = new Class({
 	Implements: [Events, Options],
 
 	options: {
+		'canvas': null,
 		'source': null,
-		'height': 50,
-		'width': 50,
 		'duration': 30
 	},
 
-	initialize: function(canvas, options) {
+	initialize: function(options) {
 		this.setOptions(options);
-		this.setupDrawer(canvas);
-		this.setImage(options.source);
+		this.setDefaultValues();
+	},
+
+	setDefaultValues: function() {
+		var options = this.options;
+		this.counter = 0;
+		if (options.canvas) { this.setCanvas(options.canvas); }
+		if (options.source) { this.setImage(options.source); }
+	},
+
+	setCanvas: function(canvas) {
+		this.canvas = canvas;
+		this.setupDrawer(this.canvas);
 	},
 
 	setupDrawer: function(canvas) {
-		this.canvas = canvas;
-		this.size = this.canvas.getSize();
+		this.size = canvas.getSize();
 		this.cols = this.size.x / this.options.width; 
 		this.rows = this.size.y / this.options.height;
 		this.total = this.cols * this.rows;
 		this.context = canvas.getContext('2d');
-		this.counter = 0;
 	},
 
 	onMotion: function(props) {},
@@ -84,7 +92,7 @@ var ImageDrawer = new Class({
 			source.src = image;
 			this.source = source;
 		} else {
-			this.source = source;
+			this.source = image;
 		}
 	},
 
@@ -97,7 +105,7 @@ var ImageDrawer = new Class({
 		var duration = this.options.duration;
 		porps.each(function(p, k) {
 			var fx = new Fx.Gradually({
-				"transition": "back:out",
+				"transition": this.options.transition,
 				"duration": duration,
 				"link": "cancel",
 				"fps": 30,
@@ -117,35 +125,63 @@ var ImageDrawer = new Class({
 
 });
 
+
+ImageDrawer.factory = function(imageDrawer, options) {
+	var typeKey = imageDrawer.capitalize();
+	if (ImageDrawer[typeKey]) {
+		var instance = new ImageDrawer[typeKey](options);
+	}
+	return instance;
+};
+
+
+/*
+ImageDrawer.implement({
+
+	getInstance: function(imageDrawer, options) {
+		var typeKey = imageDrawer.capitalize();
+		if (ImageDrawer[typeKey]) {
+			var instance = new ImageDrawer[typeKey](options);
+		}
+		return instance;
+	}
+
+});
+*/
+
 ImageDrawer.Square = new Class({
 
 	Extends: ImageDrawer,
 
 	options: {
+		'canvas': null,
+		'source': null,
 		'height': 50,
 		'width': 50,
 		'duration': 30
 	},
 
-	initialize: function(canvas, options) {
-		this.parent(canvas, options);
+	initialize: function(options) {
+		this.parent(options);
 	},
 
 	onMotion: function(props) {
 		var drawHeight = (props.height > 0) ? props.height : 0.01;
 		var drawWidth  = (props.width > 0) ? props.width : 0.01;
+		var left = (props.left > 0) ? props.left : 0.01;
+		var top = (props.top > 0) ? props.top : 0.01;
 
 		this.context.clearRect(this.x, this.y, this.width, this.height);
 		this.context.drawImage(this.source,
-			props.left, props.top, drawWidth, drawHeight,
-			props.left, props.top, drawWidth, drawHeight);
+			left, top, drawWidth, drawHeight,
+			left, top, drawWidth, drawHeight);
 	},
 
 	getContext: function(x, y) {
 		var options = this.options;
 		return {
 			"context": this.context,
-			"source": options.source,
+			"source": this.source,
 			"x": x, "y": y,
 			"width": options.width,
 			"height": options.height
@@ -168,9 +204,9 @@ ImageDrawer.Square = new Class({
 	drawRight: function() {
 		var contexts = [];
 		var options = this.options;
-		for (var x = this.cols; x >= 0; x--) {
+		for (var x = this.cols; x > 0; x--) {
 			for (var y = 0; y < this.rows; y++) {
-				var left = x * options.width;
+				var left = (x - 1) * options.width;
 				var top = y * options.height;
 				contexts.push(this.getContext(left, top));
 			}
@@ -205,6 +241,5 @@ ImageDrawer.Square = new Class({
 		}
 		this.draw(contexts);
 	}
-
 
 });

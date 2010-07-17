@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Gradually</title>
+		<meta name="keywords" content="mootools,demo,javascript,animation,canvas" />
+		<meta name="description" content="" />
+		<meta name="author" content="Noritaka Horio" />
+		<meta name="copyright" content="2009 Noritaka Horio All rights reserved" />
+		<link rel="stylesheet" type="text/css" href="../Demos/css/reset.css" media="screen,print" />
+		<link rel="stylesheet" type="text/css" href="../Demos/css/gradually.css" media="screen,print" />
+		<style type="text/css">
+			.container {
+				background: #000000;
+			}
+		</style>
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4.2-more.js"></script>
+		<script type="text/javascript" src="../Source/ImageDrawer.js"></script>
+		<script type="text/javascript" src="../Source/Gradually2.0.js"></script>
+		<script type="text/javascript">
+			window.addEvent("domready", function() {
+
+				var container = document.id("gradually");
+				var images = $$(".gradually li img");
+/*
+				var instance = ImageDrawer.factory('square', {
+					'source': 'images/demo1.jpg',
+					'height': 55,
+					'width': 65,
+					'duration': 30
+				});
+*/
+
+				var g = new Gradually(container, {
+					'images': images,
+					'drawer': {
+
+
+
+
+
+					}
+				});
+				
+				
+				$("set").addEvent("click", function(){
+					g.set(0);
+				});
+
+
+
+			});
+		</script>
+	</head>
+	<body>
+		<div id="warpper">
+			<h1>Canvas</h1>
+			<p><a id="set" href="#">set</a></p>
+			<ul id="gradually" class="gradually">
+				<li><img title="image1 title" alt="image1 discription" src="images/demo1.jpg" width="650" height="275" /></li>
+				<li><img title="image2 title" alt="image2 discription" src="images/demo2.jpg" width="650" height="275" /></li>
+				<li><img title="image3 title" alt="image3 discription" src="images/demo1.jpg" width="650" height="275" /></li>
+				<li><img title="image4 title" alt="image4 discription" src="images/demo2.jpg" width="650" height="275" /></li>
+				<li><img title="image5 title" alt="image5 discription" src="images/demo1.jpg" width="650" height="275" /></li>
+				<li><img title="image6 title" alt="image6 discription" src="images/demo2.jpg" width="650" height="275" /></li>
+			</ul>
+	    </div>
+	</body>
+</html> 
