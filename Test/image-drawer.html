@@ -24,7 +24,7 @@
 				drawLeft.addEvent("click", function() {
 
 					var image1 = new Image();
-					image1.src = "images/demo1.jpg";
+					image1.src = "images/img_demo1.jpg";
 					image1.onload = function() {
 						var left = document.id("left");
 						left.setProperties({
@@ -38,9 +38,7 @@
 							'height': image1.height
 						});
 	
-						var drawer = new ImageDrawer.Square({
-/*							'canvas': left,
-							'source': image1, */
+						var drawer = new ImageDrawer.Grid({
 							'height': 55,
 							'width': 65,
 							'transition': 'expo:in:out',
@@ -59,7 +57,7 @@
 				var drawRight = document.id("drawRight");
 				drawRight.addEvent("click", function() {
 					var image2 = new Image();
-					image2.src = "images/demo2.jpg";
+					image2.src = "images/img_demo2.jpg";
 					image2.onload = function(event) {
 						var right = document.id("right");
 						right.setProperties({
@@ -73,9 +71,7 @@
 							'height': image2.height
 						});
 	
-						var drawer = new ImageDrawer.Square({
-//							'canvas': right,
-//							'source': image2,
+						var drawer = new ImageDrawer.Grid({
 							'transition': 'back:in:out',
 							'height': 55,
 							'width': 65,
@@ -95,7 +91,7 @@
 				var drawTop = document.id("drawTop");
 				drawTop.addEvent("click", function() {
 					var image2 = new Image();
-					image2.src = "images/demo2.jpg";
+					image2.src = "images/img_demo2.jpg";
 					image2.onload = function(event) {
 						var top = document.id("top");
 						top.setProperties({
@@ -109,7 +105,7 @@
 							'height': image2.height
 						});
 	
-						var drawer = new ImageDrawer.Square({
+						var drawer = new ImageDrawer.Grid({
 							'canvas': top,
 							'source': image2,
 							'height': 55,
@@ -125,7 +121,7 @@
 				var drawBottom = document.id("drawBottom");
 				drawBottom.addEvent("click", function() {
 					var image2 = new Image();
-					image2.src = "images/demo2.jpg";
+					image2.src = "images/img_demo2.jpg";
 					image2.onload = function(event) {
 						var bottom = document.id("bottom");
 						bottom.setProperties({
@@ -139,7 +135,7 @@
 							'height': image2.height
 						});
 	
-						var drawer = new ImageDrawer.Square({
+						var drawer = new ImageDrawer.Grid({
 							'canvas': bottom,
 							'source': image2,
 							'height': 55,

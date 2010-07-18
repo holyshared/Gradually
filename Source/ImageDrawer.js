@@ -1,3 +1,38 @@
+/*
+---
+description: Gradually is an experimental slide show plug-in using the canvas element.
+
+license: MIT-style
+
+authors:
+- Noritaka Horio
+
+requires:
+  core/1.2.4:
+  - Core/Core
+  - Core/Browser
+  - Native/Array
+  - Native/Function
+  - Native/Number
+  - Native/String
+  - Native/Hash
+  - Native/Event
+  - Class/Class
+  - Class/Class.Extras
+  - Element/Element
+  - Element/Element.Event
+  - Element/Element.Style
+  - Element/Element.Dimensions
+  - Utilities/Selecter
+  - Utilities/DomReady
+  - Fx/Fx
+  - Fx/Fx.Transitions
+
+provides: [Gradually]
+
+...
+*/
+
 Fx.Gradually = new Class({
 
 	Extends: Fx,
@@ -81,7 +116,7 @@ var ImageDrawer = new Class({
 		this.counter++;
 		if (this.counter >= this.total) {
 			this.counter = 0;
-			this.fireEvent("drawComplete");
+			this.fireEvent("drawComplete", [this.canvas]);
 		}
 	},
 
@@ -135,21 +170,7 @@ ImageDrawer.factory = function(imageDrawer, options) {
 };
 
 
-/*
-ImageDrawer.implement({
-
-	getInstance: function(imageDrawer, options) {
-		var typeKey = imageDrawer.capitalize();
-		if (ImageDrawer[typeKey]) {
-			var instance = new ImageDrawer[typeKey](options);
-		}
-		return instance;
-	}
-
-});
-*/
-
-ImageDrawer.Square = new Class({
+ImageDrawer.Grid = new Class({
 
 	Extends: ImageDrawer,
 
