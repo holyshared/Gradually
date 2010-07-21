@@ -26,7 +26,7 @@
 					var image1 = new Image();
 					image1.src = "images/img_demo1.jpg";
 					image1.onload = function() {
-						var left = document.id("left");
+						var left = document.id("drawCanvas");
 						left.setProperties({
 							'width': image1.width,
 							'height': image1.height
@@ -59,7 +59,7 @@
 					var image2 = new Image();
 					image2.src = "images/img_demo2.jpg";
 					image2.onload = function(event) {
-						var right = document.id("right");
+						var right = document.id("drawCanvas");
 						right.setProperties({
 							'width': image2.width,
 							'height': image2.height
@@ -93,7 +93,7 @@
 					var image2 = new Image();
 					image2.src = "images/img_demo2.jpg";
 					image2.onload = function(event) {
-						var top = document.id("top");
+						var top = document.id("drawCanvas");
 						top.setProperties({
 							'width': image2.width,
 							'height': image2.height
@@ -123,7 +123,7 @@
 					var image2 = new Image();
 					image2.src = "images/img_demo2.jpg";
 					image2.onload = function(event) {
-						var bottom = document.id("bottom");
+						var bottom = document.id("drawCanvas");
 						bottom.setProperties({
 							'width': image2.width,
 							'height': image2.height
@@ -148,8 +148,6 @@
 					}
 				});
 
-
-
 			});
 		</script>
 	</head>
@@ -162,10 +160,7 @@
 				<li><a id="drawTop" href="#top">top</a></li>
 				<li><a id="drawBottom" href="#bottom">bottom</a></li>
 			</ul>
-			<div class="container"><canvas id="left"></canvas></div>
-			<div class="container"><canvas id="right"></canvas></div>
-			<div class="container"><canvas id="top"></canvas></div>
-			<div class="container"><canvas id="bottom"></canvas></div>
+			<div class="container"><canvas id="drawCanvas"></canvas></div>
 			<p id="log"></p>
 	    </div>
 	</body>

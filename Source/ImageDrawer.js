@@ -33,7 +33,7 @@ provides: [Gradually]
 ...
 */
 
-Fx.Gradually = new Class({
+Fx.ImageDrawer = new Class({
 
 	Extends: Fx,
 
@@ -75,6 +75,8 @@ Fx.Gradually = new Class({
 
 });
 
+
+//cancel
 var ImageDrawer = new Class({
 
 	Implements: [Events, Options],
@@ -82,6 +84,7 @@ var ImageDrawer = new Class({
 	options: {
 		'canvas': null,
 		'source': null,
+		'interval': 70,
 		'duration': 30
 	},
 
@@ -93,6 +96,7 @@ var ImageDrawer = new Class({
 	setDefaultValues: function() {
 		var options = this.options;
 		this.counter = 0;
+		this.drawers = [];
 		if (options.canvas) { this.setCanvas(options.canvas); }
 		if (options.source) { this.setImage(options.source); }
 	},
@@ -116,6 +120,7 @@ var ImageDrawer = new Class({
 		this.counter++;
 		if (this.counter >= this.total) {
 			this.counter = 0;
+			this.drawing = false;
 			this.fireEvent("drawComplete", [this.canvas]);
 		}
 	},
@@ -135,12 +140,29 @@ var ImageDrawer = new Class({
 		return this.canvas.retrieve("source");
 	},
 
+	pause: function() {
+		if (!this.drawed) {
+			this.drawers.each(function(fx) { fx.pause(); });
+		}
+		this.drawing = false;
+	},
+
+	isDrawing: function() {
+		return (this.drawing) ? true : false;
+	},
+	
 	draw: function(porps) {
+		var op = this.options;
+		var duration = op.duration;
+
+
+		this.drawing = true;
+		this.drawers = [];		
+
 		this.fireEvent("drawStart");
-		var duration = this.options.duration;
 		porps.each(function(p, k) {
-			var fx = new Fx.Gradually({
-				"transition": this.options.transition,
+			var fx = new Fx.ImageDrawer({
+				"transition": op.transition,
 				"duration": duration,
 				"link": "cancel",
 				"fps": 30,
@@ -149,17 +171,17 @@ var ImageDrawer = new Class({
 			});
 
 			fx.start({
-				"height": [this.options.height, 0],
-				"width": [this.options.width, 0],
-				"top": [p.y, p.y + this.options.height / 2],
-				"left": [p.x, p.x + this.options.width / 2]
+				"height": [op.height, 0],
+				"width": [op.width, 0],
+				"top": [p.y, p.y + op.height / 2],
+				"left": [p.x, p.x + op.width / 2]
 			});
-			duration = duration + 70;
+			duration = duration + op.interval;
+			this.drawers.push(fx);
 		}, this);
 	}
 
 });
-
 
 ImageDrawer.factory = function(imageDrawer, options) {
 	var typeKey = imageDrawer.capitalize();

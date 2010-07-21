@@ -102,13 +102,19 @@ var Gradually = new Class({
 
 	set: function(index) {
 		if (this.current != index) {
-			var image = this.images[this.current];
-			var canvas = this.canvases[this.current];
-			this.setNext(index);
-			this.current = index;
-			this.drawer.setCanvas(canvas);
-			this.drawer.setImage(image);
-			this.draw();
+			if (this.drawer.isDrawing()) {
+				this.drawer.pause();
+				this.setLast(this.current);
+				this.setFirst(index);
+			} else {
+				var image = this.images[this.current];
+				var canvas = this.canvases[this.current];
+				this.setNext(index);
+				this.current = index;
+				this.drawer.setCanvas(canvas);
+				this.drawer.setImage(image);
+				this.draw();
+			}
 		}
 	},
 
