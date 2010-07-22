@@ -81,7 +81,7 @@ var Gradually = new Class({
 		var drawerType = options.drawerType;
 		var drawerOptions = options.drawerOptions;
 		drawerOptions = $merge(drawerOptions, {
-			"onDrawStart": this.onDrawStart,
+			"onDrawStart": this.onDrawStart.bind(this),
 			"onDrawComplete": this.onDrawComplete.bind(this)
 		});
 
@@ -91,6 +91,7 @@ var Gradually = new Class({
 	},
 
 	onDrawStart: function() {
+		this.fireEvent("drawStart");
 	},
 
 	onDrawComplete: function(canvas) {
@@ -102,19 +103,18 @@ var Gradually = new Class({
 
 	set: function(index) {
 		if (this.current != index) {
+			//It cancels if it is drawing.
 			if (this.drawer.isDrawing()) {
-				this.drawer.pause();
-				this.setLast(this.current);
-				this.setFirst(index);
-			} else {
-				var image = this.images[this.current];
-				var canvas = this.canvases[this.current];
-				this.setNext(index);
-				this.current = index;
-				this.drawer.setCanvas(canvas);
-				this.drawer.setImage(image);
-				this.draw();
+				this.drawer.cancel();
+				this.drawer.fireEvent("drawComplete", [this.drawer.getCanvas()]);
 			}
+			var image = this.images[this.current];
+			var canvas = this.canvases[this.current];
+			this.setNext(index);
+			this.current = index;
+			this.drawer.setCanvas(canvas);
+			this.drawer.setImage(image);
+			this.draw();
 		}
 	},
 

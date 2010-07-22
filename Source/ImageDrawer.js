@@ -106,6 +106,10 @@ var ImageDrawer = new Class({
 		this.setupDrawer(this.canvas);
 	},
 
+	getCanvas: function() {
+		return this.canvas = canvas;
+	},
+
 	setupDrawer: function(canvas) {
 		this.size = canvas.getSize();
 		this.cols = this.size.x / this.options.width; 
@@ -141,10 +145,19 @@ var ImageDrawer = new Class({
 	},
 
 	pause: function() {
-		if (!this.drawed) {
-			this.drawers.each(function(fx) { fx.pause(); });
-		}
+		if (!this.drawed) this.drawers.each(function(fx) { fx.pause(); });
 		this.drawing = false;
+	},
+
+	cancel: function() {
+		if (!this.drawed) this.drawers.each(function(fx) { fx.cancel(); });
+		this.counter = 0;
+		this.drawing = false;
+	},
+
+	redraw: function() {
+		this.context.clearRect(0, 0, this.size.x, this.size.y);
+		this.context.drawImage(this.source, 0, 0);
 	},
 
 	isDrawing: function() {

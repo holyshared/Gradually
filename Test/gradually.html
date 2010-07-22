@@ -22,12 +22,16 @@
 		<script type="text/javascript" src="../Source/Gradually.js"></script>
 		<script type="text/javascript">
 			window.addEvent("domready", function() {
-
 				var container = document.id("gradually");
 				var images = $$(".gradually li img");
-
 				var g = new Gradually(container, {
-					'images': images
+					'images': images,
+					'onDrawStart': function() {
+						$("message").set("html", "drawStart");
+					},
+					'onDrawComplete': function() {
+						$("message").set("html", "drawComplete");
+					}
 				});
 				g.start();
 
@@ -61,6 +65,7 @@
 					<li><img title="image6 title" alt="image6 discription" src="images/img_demo6.jpg" width="650" height="275" /></li>
 				</ul>
 		    </div>
+			<p id="message"></p>
 	    </div>
 	</body>
 </html> 
