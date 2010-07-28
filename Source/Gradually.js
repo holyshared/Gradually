@@ -29,12 +29,15 @@ requires:
   - Fx/Fx.Transitions
   more/1.2.4.2:
   - Assets
+  imagedrawer/1.0:
+  - ImageDrawer/ImageDrawer
+  - ImageDrawer/Grid
+  - ImageDrawer/Expand
 
 provides: [Gradually]
 
 ...
 */
-
 
 var Gradually = new Class({
 
@@ -53,6 +56,9 @@ var Gradually = new Class({
 		'zIndex': 9000
 	},
 
+	/**
+	 * Constructor
+	 */
 	initialize: function (container, options) {
 		this.setOptions(options);
 		this.container = container;
@@ -63,20 +69,23 @@ var Gradually = new Class({
 		this.current = 0;
 	},
 
+	/**
+	 * Gradually Internal Events
+	 */
 	onPreload: function() {
 		var options = this.options;
 		var images = options.images;
 		var zIndex = images.length + options.zIndex;
 		images.each(function(image, key) {
-			var canvas = this.factory(image);
+			var canvas = this.getCanvas(image);
 			var context = canvas.getContext('2d');
 			(Browser.Engine.presto)
 			? context.drawImage(image, 0, 0)
 			: context.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight());
 		}.bind(this));
 
-		this.setFirst(this.current);
-		this.setNext(this.current + 1);
+		this.orderToFirst(this.current);
+		this.orderToNext(this.current + 1);
 
 		var drawerType = options.drawerType;
 		var drawerOptions = options.drawerOptions;
@@ -90,16 +99,23 @@ var Gradually = new Class({
 		this.fireEvent("preload");
 	},
 
-	onDrawStart: function() {
+	onDrawStart: function()	{
 		this.fireEvent("drawStart");
 	},
 
 	onDrawComplete: function(canvas) {
-		var index = this.canvases.indexOf(canvas);
-		this.setLast(index);
-		this.setFirst(this.current);
+/*		var index = this.canvases.indexOf(canvas);
+		this.orderToLast(index);
+		this.orderToFirst(this.current);
+*/
 		this.fireEvent("drawComplete", [canvas]);
 	},
+
+	/**
+	 * Setter/Getter Methods
+	 */
+	setDrawer: function(drawer) { this.drawer = drawer; },
+	getDrawer: function() { return this.drawer; },
 
 	set: function(index) {
 		if (this.current != index) {
@@ -108,9 +124,10 @@ var Gradually = new Class({
 				this.drawer.cancel();
 				this.drawer.fireEvent("drawComplete", [this.drawer.getCanvas()]);
 			}
-			var image = this.images[this.current];
-			var canvas = this.canvases[this.current];
-			this.setNext(index);
+			var image = this.images[index];
+			var canvas = this.canvases[index];
+			this.orderToLast(this.current);
+			this.orderToNext(index);
 			this.current = index;
 			this.drawer.setCanvas(canvas);
 			this.drawer.setImage(image);
@@ -129,46 +146,22 @@ var Gradually = new Class({
 		this.drawMethod++;
 	},
 
-	setNext: function(index) {
-		var zIndex = this.options.zIndex + this.images.length - 1;
-		var canvas = this.canvases[index];
-		var image = this.images[index];
-		canvas.setStyle("zIndex", zIndex);
-		var ctx = canvas.getContext('2d');
-		ctx.drawImage(image, 0, 0);
+	start: function() {
+		var images = this.options.images;
+		var preloadImages = [];
+		images.each(function(e,k) {
+			preloadImages.push(e.getProperty("src"));
+			e.setStyle("display", "none");
+		});
+		this.images = new Asset.images(preloadImages, {
+			"onComplete": this.onPreload.bind(this)
+		});
 	},
 
-	setFirst: function(index) {
-		canvas = this.canvases[index];
-		canvas.setStyle("zIndex", this.options.zIndex + this.images.length);
-	},
-
-	setLast: function(index) {
-		var zIndex = this.options.zIndex;
-		var canvas = this.canvases[index];
-		var image = this.images[index];
-		canvas.setStyle("zIndex", zIndex);
-		var ctx = canvas.getContext('2d');
-//		ctx.clearRect(0, 0, 9999, 9999);
-		ctx.drawImage(image, 0, 0);
-	},
-
-	setDrawer: function(drawer) {
-		this.drawer = drawer;
-	},
-
-	getDrawer: function() {
-		return this.drawer;
-	},
-
-	addCanvas: function(image) {
-		var zIndex = this.canvases.length + 1;
-		var canvas = this.factory(image);
-		canvas.setStyle("zIndex", zIndex);
-		return canvas;
-	},
-
-	factory: function(image) {
+	/**
+	 * Private Methods
+	 */
+	getCanvas: function(image) {
 		var props = image.getProperties("width", "height", "title", "alt", "src");
 		var canvas = new Element("canvas", {
 			"width": props.width,
@@ -183,16 +176,31 @@ var Gradually = new Class({
 		return canvas;
 	},
 
-	start: function() {
-		var images = this.options.images;
-		var preloadImages = [];
-		images.each(function(e,k) {
-			preloadImages.push(e.getProperty("src"));
-			e.setStyle("display", "none");
-		});
-		this.images = new Asset.images(preloadImages, {
-			"onComplete": this.onPreload.bind(this)
-		});
+	orderToNext: function(index) {
+		var zIndex = this.options.zIndex + 2;
+		var canvas = this.canvases[index];
+		var image = this.images[index];
+		canvas.setStyle("zIndex", zIndex);
+		var ctx = canvas.getContext('2d');
+//		ctx.drawImage(image, 0, 0);
+
+
+
+		ctx.clearRect(0, 0, image.width , image.height);
+	},
+
+	orderToFirst: function(index) {
+		canvas = this.canvases[index];
+		canvas.setStyle("zIndex", this.options.zIndex + 2);
+	},
+
+	orderToLast: function(index) {
+		var zIndex = this.options.zIndex;
+		var canvas = this.canvases[index];
+		var image = this.images[index];
+		canvas.setStyle("zIndex", zIndex);
+		var ctx = canvas.getContext('2d');
+		ctx.drawImage(image, 0, 0);
 	}
 
 });
