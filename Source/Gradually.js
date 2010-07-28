@@ -31,8 +31,8 @@ requires:
   - Assets
   imagedrawer/1.0:
   - ImageDrawer/ImageDrawer
-  - ImageDrawer/Grid
-  - ImageDrawer/Expand
+  - ImageDrawer/ImageDrawer.Grid
+  - ImageDrawer/ImageDrawer.Expand
 
 provides: [Gradually]
 
@@ -44,16 +44,15 @@ var Gradually = new Class({
 	Implements: [Events, Options],
 
 	options: {
-		'drawerType': 'grid',
-		'drawMethod': ['left', 'right'],
-		'drawerOptions': {
-			'height': 55,
-			'width': 65,
-			'duration': 1000,
-			'transition': 'expo:in:out'
-		},
+		'drawer': null,
 		'images': null,
-		'zIndex': 9000
+		'zIndex': 9000,
+		/*
+			onPreload: $empty,
+			onSelect: $empty,
+			onDrawStart: $empty,
+			onDrawComplete: $empty
+		*/
 	},
 
 	/**
@@ -62,11 +61,8 @@ var Gradually = new Class({
 	initialize: function (container, options) {
 		this.setOptions(options);
 		this.container = container;
-		this.canvases = [];
-		this.properties = [];
-		this.images = [];
-		this.drawMethod = 0;
 		this.current = 0;
+		this.panels = [];
 	},
 
 	/**
@@ -75,40 +71,36 @@ var Gradually = new Class({
 	onPreload: function() {
 		var options = this.options;
 		var images = options.images;
-		var zIndex = images.length + options.zIndex;
 		images.each(function(image, key) {
-			var canvas = this.getCanvas(image);
-			var context = canvas.getContext('2d');
-			(Browser.Engine.presto)
-			? context.drawImage(image, 0, 0)
-			: context.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight());
+			this.addPanel(image);
 		}.bind(this));
 
-		this.orderToFirst(this.current);
-		this.orderToNext(this.current + 1);
+		var drawer = this.options.drawer;
+		drawer.addEvent("onDrawStart", this.onDrawStart.bind(this));
+		drawer.addEvent("onDrawComplete", this.onDrawComplete.bind(this));
 
-		var drawerType = options.drawerType;
-		var drawerOptions = options.drawerOptions;
-		drawerOptions = $merge(drawerOptions, {
-			"onDrawStart": this.onDrawStart.bind(this),
-			"onDrawComplete": this.onDrawComplete.bind(this)
-		});
-
-		var instance = ImageDrawer.factory(drawerType, drawerOptions);
-		this.setDrawer(instance);
+		this.drawDefaultImage();
+		this.setDrawer(drawer);
 		this.fireEvent("preload");
 	},
 
-	onDrawStart: function()	{
-		this.fireEvent("drawStart");
+	onDrawStart: function(drawer) {
+		this.fireEvent("drawStart", [this.getCurrent(), drawer]);
 	},
 
-	onDrawComplete: function(canvas) {
-/*		var index = this.canvases.indexOf(canvas);
-		this.orderToLast(index);
-		this.orderToFirst(this.current);
-*/
-		this.fireEvent("drawComplete", [canvas]);
+	onDrawComplete: function(drawer) {
+		this.orderToBack();
+		this.fireEvent("drawComplete", [this.getCurrent(), drawer]);
+	},
+
+	drawDefaultImage: function() {
+		var current = this.getCurrent();
+		var canvas = current.canvas;
+		var image = current.image;
+		var ctx = canvas.getContext('2d');
+		ctx.drawImage(image,
+		0, 0, image.width, image.height,
+		0, 0, image.width, image.height);
 	},
 
 	/**
@@ -119,31 +111,80 @@ var Gradually = new Class({
 
 	set: function(index) {
 		if (this.current != index) {
-			//It cancels if it is drawing.
+			this.current = index;
+			this.fireEvent("select", [this.current, this.getCurrent()]);
 			if (this.drawer.isDrawing()) {
 				this.drawer.cancel();
-				this.drawer.fireEvent("drawComplete", [this.drawer.getCanvas()]);
+				this.drawer.fireEvent("drawComplete", [this.drawer]);
 			}
-			var image = this.images[index];
-			var canvas = this.canvases[index];
-			this.orderToLast(this.current);
-			this.orderToNext(index);
-			this.current = index;
-			this.drawer.setCanvas(canvas);
-			this.drawer.setImage(image);
+
+			var current = this.getCurrent();
+			this.orderToNext();
+			this.drawer.setCanvas(current.canvas);
+			this.drawer.setImage(current.image);
 			this.draw();
 		}
 	},
 
 	draw: function() {
-		var methodType = this.options.drawMethod;
-		if (this.drawMethod >= methodType.length) {
-			this.drawMethod = 0;
-		}
-		var method = methodType[this.drawMethod];
-		method = method.capitalize();
-		this.drawer['draw' + method]();
-		this.drawMethod++;
+		(this.current % 2)
+		? this.drawer.drawRight()
+		: this.drawer.drawLeft();
+	},
+
+	orderToNext: function() {
+		var current = this.getCurrent();
+		var canvas = current.canvas;
+		var image = current.image;
+		canvas.setStyle("zIndex", this.options.zIndex + 2);
+		var ctx = canvas.getContext('2d');
+		ctx.clearRect(0, 0, image.width, image.height);
+	},
+
+	orderToBack: function() {
+		var current = this.getCurrent();
+		var canvas = current.canvas;
+		canvas.setStyle("zIndex", this.options.zIndex + 1);
+		this.panels.each(function(panel) {
+			var pcanvas = panel.canvas;
+			if (canvas != pcanvas) {
+				pcanvas.setStyle("zIndex", this.options.zIndex);
+			}
+		}, this);
+	},
+
+	setDrawer: function(drawer) {
+		this.drawer = drawer;
+	},
+
+	getDrawer: function() {
+		return this.drawer;
+	},
+
+	getPanel: function(index) {
+		return this.panels[index];
+	},
+
+	getCurrent: function() {
+		return this.getPanel(this.current);
+	},
+
+	/**
+	 * Private Methods
+	 */
+	addPanel: function(image) {
+		var props = image.getProperties("width", "height", "title", "alt", "src");
+		var canvas = new Element("canvas", {
+			"width": props.width,
+			"height": props.height,
+			"class": "source",
+			"styles": { "zIndex": this.options.zIndex }
+		});
+		this.panels.push($merge({'canvas': canvas, 'image': image}, props));
+
+		image.setStyle("display", "none");
+		canvas.inject(image.parentNode);
+		return canvas;
 	},
 
 	start: function() {
@@ -153,54 +194,7 @@ var Gradually = new Class({
 			preloadImages.push(e.getProperty("src"));
 			e.setStyle("display", "none");
 		});
-		this.images = new Asset.images(preloadImages, {
-			"onComplete": this.onPreload.bind(this)
-		});
-	},
-
-	/**
-	 * Private Methods
-	 */
-	getCanvas: function(image) {
-		var props = image.getProperties("width", "height", "title", "alt", "src");
-		var canvas = new Element("canvas", {
-			"width": props.width,
-			"height": props.height,
-			"class": "source"
-		});
-		this.canvases.push(canvas);
-		this.properties.push(props);
-		image.setStyle("display", "none");		
-		canvas.inject(image.parentNode);
-
-		return canvas;
-	},
-
-	orderToNext: function(index) {
-		var zIndex = this.options.zIndex + 2;
-		var canvas = this.canvases[index];
-		var image = this.images[index];
-		canvas.setStyle("zIndex", zIndex);
-		var ctx = canvas.getContext('2d');
-//		ctx.drawImage(image, 0, 0);
-
-
-
-		ctx.clearRect(0, 0, image.width , image.height);
-	},
-
-	orderToFirst: function(index) {
-		canvas = this.canvases[index];
-		canvas.setStyle("zIndex", this.options.zIndex + 2);
-	},
-
-	orderToLast: function(index) {
-		var zIndex = this.options.zIndex;
-		var canvas = this.canvases[index];
-		var image = this.images[index];
-		canvas.setStyle("zIndex", zIndex);
-		var ctx = canvas.getContext('2d');
-		ctx.drawImage(image, 0, 0);
+		new Asset.images(preloadImages, {"onComplete": this.onPreload.bind(this)});
 	}
 
 });

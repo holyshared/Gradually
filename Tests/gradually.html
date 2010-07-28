@@ -18,20 +18,29 @@
 		</style>
 		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
 		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4.2-more.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image_drawer/ImageDrawer.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image_drawer/ImageDrawer.Grid.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image_drawer/ImageDrawer.Expand.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.Grid.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.Expand.js"></script>
 		<script type="text/javascript" src="../Source/Gradually.js"></script>
 		<script type="text/javascript">
 			window.addEvent("domready", function() {
+				var drawer = new ImageDrawer.Grid({
+					'gridHeight': 55,
+					'gridWidth': 65,
+					'interval': 70,
+					'duration': 600,
+					'transition': 'expo:in'
+				});
+
 				var container = document.id("gradually");
 				var images = $$(".gradually li img");
 				var g = new Gradually(container, {
 					'images': images,
-					'onDrawStart': function() {
+					'drawer': drawer,
+					'onDrawStart': function(panel, drawer) {
 						$("message").set("html", "drawStart");
 					},
-					'onDrawComplete': function() {
+					'onDrawComplete': function(panel, drawer) {
 						$("message").set("html", "drawComplete");
 					}
 				});
@@ -47,7 +56,7 @@
 	</head>
 	<body>
 		<div id="warpper">
-			<h1>Canvas</h1>
+			<h1>Gradually</h1>
 			<ul id="nav">
 				<li><a href="#">set1</a></li>
 				<li><a href="#">set2</a></li>
@@ -69,5 +78,4 @@
 		    </div>
 			<p id="message"></p>
 	    </div>
-	</body>
-</html> 
+	</body></html> 
