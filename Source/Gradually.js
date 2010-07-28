@@ -69,14 +69,17 @@ var Gradually = new Class({
 		var zIndex = images.length + options.zIndex;
 		images.each(function(image, key) {
 			var canvas = this.factory(image);
+
+			/*
 			var context = canvas.getContext('2d');
 			(Browser.Engine.presto)
 			? context.drawImage(image, 0, 0)
 			: context.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight());
+*/
 		}.bind(this));
 
-		this.setFirst(this.current);
-		this.setNext(this.current + 1);
+//		this.setFirst(this.current);
+//		this.setNext(this.current + 1);
 
 		var drawerType = options.drawerType;
 		var drawerOptions = options.drawerOptions;
@@ -94,10 +97,13 @@ var Gradually = new Class({
 		this.fireEvent("drawStart");
 	},
 
-	onDrawComplete: function(canvas) {
+	onDrawComplete: function(drawer) {
+
+		var canvas = drawer.getCanvas();
+		
 		var index = this.canvases.indexOf(canvas);
 		this.setLast(index);
-		this.setFirst(this.current);
+//this.setFirst(this.current);
 		this.fireEvent("drawComplete", [canvas]);
 	},
 
@@ -108,8 +114,8 @@ var Gradually = new Class({
 				this.drawer.cancel();
 				this.drawer.fireEvent("drawComplete", [this.drawer.getCanvas()]);
 			}
-			var image = this.images[this.current];
-			var canvas = this.canvases[this.current];
+			var image = this.images[index];
+			var canvas = this.canvases[index];
 			this.setNext(index);
 			this.current = index;
 			this.drawer.setCanvas(canvas);
@@ -130,27 +136,32 @@ var Gradually = new Class({
 	},
 
 	setNext: function(index) {
-		var zIndex = this.options.zIndex + this.images.length - 1;
+		var zIndex = this.options.zIndex + 2;
 		var canvas = this.canvases[index];
 		var image = this.images[index];
 		canvas.setStyle("zIndex", zIndex);
+/*
+		var image = this.images[index];
+		canvas.setStyle("zIndex", zIndex);
+*/
 		var ctx = canvas.getContext('2d');
-		ctx.drawImage(image, 0, 0);
+		ctx.clearRect(0, 0, image.width, image.height);
 	},
-
+/*
 	setFirst: function(index) {
 		canvas = this.canvases[index];
 		canvas.setStyle("zIndex", this.options.zIndex + this.images.length);
 	},
-
+*/
 	setLast: function(index) {
-		var zIndex = this.options.zIndex;
+		var zIndex = this.options.zIndex + 1;
 		var canvas = this.canvases[index];
 		var image = this.images[index];
+		
 		canvas.setStyle("zIndex", zIndex);
-		var ctx = canvas.getContext('2d');
+//		var ctx = canvas.getContext('2d');
 //		ctx.clearRect(0, 0, 9999, 9999);
-		ctx.drawImage(image, 0, 0);
+//		ctx.drawImage(image, 0, 0);
 	},
 
 	setDrawer: function(drawer) {
@@ -173,7 +184,8 @@ var Gradually = new Class({
 		var canvas = new Element("canvas", {
 			"width": props.width,
 			"height": props.height,
-			"class": "source"
+			"class": "source",
+			"styles": {	"zIndex": this.options.zIndex } 
 		});
 		this.canvases.push(canvas);
 		this.properties.push(props);
