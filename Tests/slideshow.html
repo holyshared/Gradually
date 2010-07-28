@@ -9,51 +9,56 @@
 		<meta name="copyright" content="2009 Noritaka Horio All rights reserved" />
 		<link rel="stylesheet" type="text/css" href="../Demos/css/reset.css" media="screen,print" />
 		<link rel="stylesheet" type="text/css" href="../Demos/css/gradually.css" media="screen,print" />
-		<style type="text/css">
-			.container {
-				background: #000000;
-				width: 650px;
-				padding: 10px;
-			}
-		</style>
 		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
 		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4.2-more.js"></script>
-		<script type="text/javascript" src="../Source/ImageDrawer.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.Grid.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.Expand.js"></script>
 		<script type="text/javascript" src="../Source/Gradually.js"></script>
 		<script type="text/javascript" src="../Source/Gradually.Slideshow.js"></script>
 		<script type="text/javascript">
 			window.addEvent("domready", function() {
+				var grid = new ImageDrawer.Grid({
+					'gridHeight': 55,
+					'gridWidth': 65,
+					'interval': 70,
+					'duration': 600,
+					'transition': 'expo:in'
+				});
 
-				var container = document.id("gradually");
-				var images = $$(".gradually li img");
+				var type1 = document.id("type1");
+				var images = type1.getElements(".gradually li img");
 
-				var g = new Gradually.Slideshow(container, {
+				new Gradually.Slideshow(type1, {
+					'drawer': grid,
 					'images': images,
 					'interval': 3000
 				});
 
-				var nav = $("nav").getElements("li a");
-				nav.addEvent("click", function(event) {
-					var index = nav.indexOf(event.target);
-					g.set(index);
+
+				var expand = new ImageDrawer.Expand({
+					'gridHeight': 55,
+					'gridWidth': 65,
+					'interval': 70,
+					'duration': 600,
+					'transition': 'expo:in:out'
+				});
+
+				var type2 = document.id("type2");
+				var images = type2.getElements(".gradually li img");
+				new Gradually.Slideshow(type2, {
+					'drawer': expand,
+					'images': images,
+					'interval': 3000
 				});
 			});
 		</script>
 	</head>
 	<body>
 		<div id="warpper">
-			<h1>Canvas</h1>
-			<ul id="nav">
-				<li><a href="#">set1</a></li>
-				<li><a href="#">set2</a></li>
-				<li><a href="#">set3</a></li>
-				<li><a href="#">set4</a></li>
-				<li><a href="#">set5</a></li>
-				<li><a href="#">set6</a></li>
-			</ul>
-
-			<div class="container">
-				<ul id="gradually" class="gradually">
+			<h1>Gradually.Slideshow</h1>
+			<div id="type1" class="container">
+				<ul class="gradually">
 					<li><img title="image1 title" alt="image1 discription" src="images/img_demo1.jpg" width="650" height="275" /></li>
 					<li><img title="image2 title" alt="image2 discription" src="images/img_demo2.jpg" width="650" height="275" /></li>
 					<li><img title="image3 title" alt="image3 discription" src="images/img_demo3.jpg" width="650" height="275" /></li>
@@ -61,7 +66,31 @@
 					<li><img title="image5 title" alt="image5 discription" src="images/img_demo5.jpg" width="650" height="275" /></li>
 					<li><img title="image6 title" alt="image6 discription" src="images/img_demo6.jpg" width="650" height="275" /></li>
 				</ul>
+				<p class="information">
+					<strong class="title"></strong>
+					<span class="current"></span>&nbsp;/&nbsp;<span class="total"></span>
+				</p>
 		    </div>
+
+
+
+
+			<div id="type2" class="container">
+				<ul class="gradually">
+					<li><img title="image1 title" alt="image1 discription" src="images/img_demo1.jpg" width="650" height="275" /></li>
+					<li><img title="image2 title" alt="image2 discription" src="images/img_demo2.jpg" width="650" height="275" /></li>
+					<li><img title="image3 title" alt="image3 discription" src="images/img_demo3.jpg" width="650" height="275" /></li>
+					<li><img title="image4 title" alt="image4 discription" src="images/img_demo4.jpg" width="650" height="275" /></li>
+					<li><img title="image5 title" alt="image5 discription" src="images/img_demo5.jpg" width="650" height="275" /></li>
+					<li><img title="image6 title" alt="image6 discription" src="images/img_demo6.jpg" width="650" height="275" /></li>
+				</ul>
+				<p class="information">
+					<strong class="title"></strong>
+					<span class="current"></span>&nbsp;/&nbsp;<span class="total"></span>
+				</p>
+		    </div>
+
+
 	    </div>
 	</body>
 </html> 

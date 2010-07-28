@@ -62,7 +62,9 @@ var Gradually = new Class({
 		this.setOptions(options);
 		this.container = container;
 		this.current = 0;
+		this.drawer = null;
 		this.panels = [];
+		this.setDefaultValues();
 	},
 
 	/**
@@ -75,12 +77,7 @@ var Gradually = new Class({
 			this.addPanel(image);
 		}.bind(this));
 
-		var drawer = this.options.drawer;
-		drawer.addEvent("onDrawStart", this.onDrawStart.bind(this));
-		drawer.addEvent("onDrawComplete", this.onDrawComplete.bind(this));
-
 		this.drawDefaultImage();
-		this.setDrawer(drawer);
 		this.fireEvent("preload");
 	},
 
@@ -91,6 +88,13 @@ var Gradually = new Class({
 	onDrawComplete: function(drawer) {
 		this.orderToBack();
 		this.fireEvent("drawComplete", [this.getCurrent(), drawer]);
+	},
+
+	setDefaultValues: function() {
+		var drawer = this.options.drawer;
+		drawer.addEvent("onDrawStart", this.onDrawStart.bind(this));
+		drawer.addEvent("onDrawComplete", this.onDrawComplete.bind(this));
+		this.setDrawer(drawer);
 	},
 
 	drawDefaultImage: function() {
@@ -188,6 +192,8 @@ var Gradually = new Class({
 	},
 
 	start: function() {
+		if (!this.drawer) throw new TypeError("Drawer is not set. Please set ImageDrawer.");
+
 		var images = this.options.images;
 		var preloadImages = [];
 		images.each(function(e,k) {

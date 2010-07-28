@@ -41,22 +41,23 @@ Gradually.Slideshow = new Class({
 	Extends: Gradually,
 
 	options: {
-		'drawerType': 'grid',
-		'drawerOptions': {
-			'height': 55,
-			'width': 65,
-			'duration': 1000,
-			'transition': 'expo:in:out'
-		},
+		'drawer': null,
 		'images': null,
 		'interval': 1000,
 		'zIndex': 9000
+		/*
+			onPreload: $empty,
+			onSelect: $empty,
+			onDrawStart: $empty,
+			onDrawComplete: $empty
+		*/
 	},
 
 	initialize: function (container, options) {
-	this.parent(container, options);
+		this.parent(container, options);
 		this.addEvent("drawComplete", this.onNextDelay.bind(this));
-		this.addEvent("preload", this.onNextDelay.bind(this));
+		this.addEvent("preload", this.onStart.bind(this));
+		this.addEvent("select", this.onSelect.bind(this));
 		this.start();
 	},
 
@@ -64,8 +65,26 @@ Gradually.Slideshow = new Class({
 		this.next.delay(this.options.interval, this);
 	},
 
+	onStart: function() {
+		var information = this.container.getElement(".information");
+		this.title = information.getElement(".title");
+		this.currentPanel = information.getElement(".current");
+		this.totalPanel = information.getElement(".total");
+
+		var current = this.getCurrent();
+		this.title.set("html", current.title);
+		this.currentPanel.set("html", this.current + 1);
+		this.totalPanel.set("html", this.panels.length);
+		this.next.delay(this.options.interval, this);
+	},
+
+	onSelect: function(index, panel) {
+		this.title.set("html", panel.title);
+		this.currentPanel.set("html", index + 1);
+	},
+
 	next: function() {
-		if (this.current < this.images.length - 1) {
+		if (this.current < this.panels.length - 1) {
 			var nextIndex = this.current + 1;
 			this.set(nextIndex);
 		} else {

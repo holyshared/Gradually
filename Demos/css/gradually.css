@@ -1,9 +1,11 @@
 @charset "utf-8";
 
-div#container {
+.container {
 	width: 650px;
 	padding: 10px;
 	background: #000000;
+	-moz-box-shadow: 0px 0px 10px #333333;
+	margin-bottom: 20px;
 }
 
 .gradually {
@@ -28,8 +30,12 @@ div#container {
 	display: inline;
 }
 
-p.information {
+.information {
 	background: #000000;
 	text-align: right;
 	color: #ffffff;
+}
+
+.title {
+	float: left;
 }
