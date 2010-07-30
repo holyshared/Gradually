@@ -106,19 +106,29 @@ Gradually.Gallery = new Class({
 
 Gradually.Gallery.Controller = new Class({
 
-	Implements: [Events],
+	Implements: [Events, Options],
 
-	initialize: function (container) {
+	options: {
+		'defaultIndex': 0,
+		'prepage': 5
+		'containerClass': 'graduallyThumbnails',
+		'prevClass': 'prev',
+		'nextClass': 'next',
+		'disableOpacity': 0.6
+		/*
+		'onNext': $empty,
+		'onPrev': $empty,
+		'onChange': $empty
+		*/
+	},
+
+	initialize: function (container, options) {
+		this.setOptions(options);
 		this.controller = container;
-		this.images = this.controller.getElements(".graduallyThumbnails li img");
-		this.prevButton = this.controller.getElement(".prev a");
-		this.nextButton = this.controller.getElement(".next a");
-		this.current = 0;
-		this.displayCount = 5;
-//		this.page = 0;
-
-		this.set(this.current);
-
+		this.images = this.controller.getElements("." + this.options.containerClass + " li img");
+		this.prevButton = this.controller.getElement("." + this.options.prevClass + " a");
+		this.nextButton = this.controller.getElement("." + this.options.nextClass + " a");
+		this.set(this.options.defaultIndex);
 		this.prevButton.addEvent("click", this.onPrevClick.bind(this));
 		this.nextButton.addEvent("click", this.onNextClick.bind(this));
 	},
@@ -133,47 +143,43 @@ Gradually.Gallery.Controller = new Class({
 	onNextClick: function() {
 		if (this.current + 1 <= this.images.length - 1) {
 			this.current++;
-//alert(this.current);
 			this.set(this.current);
 		}
 	},
 
 	getRange: function() {
 		var sIndex = eIndex = this.current;
-		var page = Math.floor(this.current / this.displayCount);
-		if (this.current <= this.displayCount - 1) {
+		var page = Math.floor(this.current / this.options.prepage);
+		if (this.current <= this.options.prepage - 1) {
 			sIndex = 0;
-			eIndex = this.displayCount - 1;
+			eIndex = this.options.prepage - 1;
 		} else if (this.current == this.images.length - 1) {
-			sIndex = this.current - this.displayCount + 1;
+			sIndex = this.current - this.options.prepage + 1;
 			eIndex = this.images.length - 1;
 		} else {
-			sIndex = page * this.displayCount + 1
-			eIndex = sIndex + this.displayCount - 1;
+			sIndex = page * this.options.prepage + 1
+			eIndex = sIndex + this.options.prepage - 1;
 		}
 		return {"from": sIndex, "to": eIndex};
 	},
 
 	set: function(index) {
 		this.current = index;
-		var renge = this.getRange();
+		var range = this.getRange();
 		this.images.each(function(image, key) {
-			if (key >= renge.from
-			&& key <= renge.to) {
-				image.setStyle("display", "");
+			var parent = image.getParent("li");
+			if (key >= range.from && key <= range.to) {
+				parent.setStyle("display", "");
 			} else {
-				image.setStyle("display", "none");
+				parent.setStyle("display", "none");
 			}
 			(key == this.current)
 			? image.setStyle("opacity", 1)
-			: image.setStyle("opacity", 0.2);
+			: image.setStyle("opacity", this.options.disableOpacity);
+			(key == range.from)
+			? parent.addClass("first") 
+			: parent.removeClass("first");
 		}, this);
 	}
 
 });
-
-
-
-
-
-
