@@ -289,7 +289,6 @@ ImageDrawer is made an instance, and it specifies it for the option of Gradually
 			'disableOpacity': 0.2
 		}
 	});
-	gallery.start();
 
 
 
