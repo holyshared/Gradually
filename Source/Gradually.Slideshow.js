@@ -44,7 +44,10 @@ Gradually.Slideshow = new Class({
 		'drawer': null,
 		'images': null,
 		'interval': 1000,
-		'zIndex': 9000
+		'zIndex': 9000,
+		'titleClass': 'title',
+		'currentClass': 'current',
+		'totalClass': 'total'
 		/*
 			onPreload: $empty,
 			onSelect: $empty,
@@ -66,10 +69,9 @@ Gradually.Slideshow = new Class({
 	},
 
 	onStart: function() {
-		var information = this.container.getElement(".information");
-		this.title = information.getElement(".title");
-		this.currentPanel = information.getElement(".current");
-		this.totalPanel = information.getElement(".total");
+		this.title = this.container.getElement("." + this.options.titleClass);
+		this.currentPanel = this.container.getElement("." + this.options.currentClass);
+		this.totalPanel = this.container.getElement("." + this.options.totalClass);
 
 		var current = this.getCurrent();
 		this.title.set("html", current.title);

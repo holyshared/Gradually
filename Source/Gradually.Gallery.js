@@ -64,11 +64,13 @@ Gradually.Gallery = new Class({
 	initialize: function (container, options) {
 		this.parent(container, options);
 		this.addEvent("preload", this.onStart.bind(this));
+
 		var controllerOptions = this.options.controller;
 		var controller = this.container.getElement("." + controllerOptions.controllerClass);
-		this.controller = new Gradually.Gallery.Controller(controller, {
+		controllerOptions = $merge(controllerOptions, {
 			"onSelect": this.onSelect.bind(this)
 		});
+		this.controller = new Gradually.Gallery.Controller(controller, controllerOptions);
 		this.start();
 	},
 

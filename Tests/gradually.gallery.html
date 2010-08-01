@@ -27,9 +27,20 @@
 
 				var container = document.id("gallery");
 				var images = $$(".graduallyImages li img");
+
+				//
 				var g = new Gradually.Gallery(container, {
 					'images': images,
 					'drawer': drawer,
+					'controller': {
+						'disableOpacity': 0.4
+					},
+					onPreload: function() {
+						$("message").set("html", "preload");
+					},
+					onSelect: function(index, panel) {
+						$("message").set("html", "select");
+					},
 					'onDrawStart': function(panel, drawer) {
 						$("message").set("html", "drawStart");
 					},
