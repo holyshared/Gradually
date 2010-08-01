@@ -47,6 +47,9 @@ Gradually.Gallery = new Class({
 		'drawer': null,
 		'images': null,
 		'zIndex': 9000,
+		'titleClass': 'title',
+		'currentClass': 'current',
+		'totalClass': 'total',
 		'controller': {
 			'controllerClass': 'graduallyController',
 			'defaultIndex': 0,
@@ -67,30 +70,34 @@ Gradually.Gallery = new Class({
 	initialize: function (container, options) {
 		this.parent(container, options);
 		this.addEvent("preload", this.onStart.bind(this));
+		this.addEvent("select", this.onSelect.bind(this));
 
 		var controllerOptions = this.options.controller;
 		var controller = this.container.getElement("." + controllerOptions.controllerClass);
 		controllerOptions = $merge(controllerOptions, {
-			"onSelect": this.onSelect.bind(this)
+			"onSelect": this.onThumbnailSelect.bind(this)
 		});
 		this.controller = new Gradually.Gallery.Controller(controller, controllerOptions);
 		this.start();
 	},
 
 	onStart: function() {
-//		var information = this.container.getElement(".information");
-//		this.title = information.getElement(".title");
-//		this.currentPanel = information.getElement(".current");
-//		this.totalPanel = information.getElement(".total");
+		this.title = this.container.getElement("." + this.options.titleClass);
+		this.currentPanel = this.container.getElement("." + this.options.currentClass);
+		this.totalPanel = this.container.getElement("." + this.options.totalClass);
 
-	//	var current = this.getCurrent();
-//		this.title.set("html", current.title);
-//		this.currentPanel.set("html", this.current + 1);
-//		this.totalPanel.set("html", this.panels.length);
-//		this.next.delay(this.options.interval, this);
+		var current = this.getCurrent();
+		this.title.set("html", current.title);
+		this.currentPanel.set("html", this.current + 1);
+		this.totalPanel.set("html", this.panels.length);
 	},
 
-	onSelect: function(index, image) {
+	onSelect: function(index, panel) {
+		this.title.set("html", panel.title);
+		this.currentPanel.set("html", index + 1);
+	},
+
+	onThumbnailSelect: function(index, image) {
 		this.set(index);
 	}
 

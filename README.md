@@ -290,6 +290,9 @@ ImageDrawer is made an instance, and it specifies it for the option of Gradually
 * **drawer**: (object) - Instance of ImageDrawer.
 * **images**: (array) - Image element to display.
 * **zIndex**: (number) - The hierarchy and the default of the layer are 9000.
+* **titleClass**: (string) - Class of element that sets title of present image.
+* **currentClass**: (string) - Class of element that sets present image number.
+* **totalClass**: (string) - Class of element that sets the number of sheets of image.
 * **controller**: (object) - Thumbnail controller's options.
 * **onPreload**: (function) - When preload of the image is completed, this event is generated.
 * **onSelect**: (function) - When the image changes, it is generated. In the first argument, the number and the second argument in the selected image are the panel object.
