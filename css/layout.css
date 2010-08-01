@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 div#warpper {
-	width: 670px;
+	width: 960px;
 	margin: 20px auto;
 	text-align: left;
 }
@@ -27,12 +27,7 @@ dl.properties dd {
 	margin-left: 150px;
 }
 
-
-
 div.section {
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-	border: 1px solid #cccccc;
 	padding: 15px;
 	margin-bottom: 30px;
 }
@@ -41,10 +36,10 @@ div.section div.section {
 	margin-bottom: 15px;
 }
 
-
 ul.navigation {
 	overflow: hidden;
 	margin-bottom: 15px;
+	list-style: none;
 }
 
 ul.navigation li {

@@ -3,46 +3,23 @@ SyntaxHighlighter.all();
 
 window.addEvent("load", function(){
 
-	var container	= null, sources = null, size = null, position = null, dHeight = null;
-	var container	= $("gradually-container");
-	var sources		= $("gradually-container").getElements("li img");
-	var information = $("container").getElement("p.information");
+	var drawer = new ImageDrawer.Grid({
+		'gridHeight': 55,
+		'gridWidth': 65,
+		'interval': 70,
+		'duration': 300,
+		'transition': 'expo:out'
+	});
 
-	var options = {
-		'panelHeight': 55,
-		'panelWidth': 65,
-		'interval': 3000,
-		'duration': 800,
-		'zIndex': 9000,
-		'onStart': function() {
-			size		= container.getSize();
-			position	= container.getPosition();
-			dHeight		= information.getSize().y;
+	var container = document.id("gallery");
+	var images = $$(".graduallyImages li img");
 
-			information.setStyles({
-				"position": "absolute",
-				"left": position.x - 1, "top": position.y + size.y - dHeight,
-				"width": size.x - 10, "height": 0,
-				"zIndex": 20000,
-				"opacity": 0.8
-			});
-
-			information.set("html", "now loading....");
-		},
-		'onChange': function(image) {
-			var fx = information.get("morph", {
-				"link": "chain",
-				"transition": "expo:in:out",
-				"onComplete": function() {
-					information.set("html", image.title + " : " + image.alt);
-				}
-			});
-
-			fx.start({ "height": [dHeight, 0], "top": [position.y + size.y - dHeight, position.y + size.y] })
-			  .start({ "height": [0, dHeight], "top": [position.y + size.y, position.y + size.y - dHeight] });
+	var gallery = new Gradually.Gallery(container, {
+		'images': images,
+		'drawer': drawer,  //Instance of ImageDrawer
+		'controller': {
+			'disableOpacity': 0.2
 		}
-	};
-
-	new Gradually(container, sources, options);
+	});
 
 });
