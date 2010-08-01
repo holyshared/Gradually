@@ -35,7 +35,6 @@ provides: [Gradually]
 ...
 */
 
-
 Gradually.Gallery = new Class({
 
 	Extends: Gradually,
@@ -44,7 +43,16 @@ Gradually.Gallery = new Class({
 		'drawer': null,
 		'images': null,
 		'interval': 1000,
-		'zIndex': 9000
+		'zIndex': 9000,
+		'controller': {
+			'controllerClass': 'graduallyController',
+			'defaultIndex': 0,
+			'prepage': 5,
+			'containerClass': 'graduallyThumbnails',
+			'prevClass': 'prev',
+			'nextClass': 'next',
+			'disableOpacity': 0.6
+		}
 		/*
 			onPreload: $empty,
 			onSelect: $empty,
@@ -55,15 +63,14 @@ Gradually.Gallery = new Class({
 
 	initialize: function (container, options) {
 		this.parent(container, options);
-//		this.addEvent("drawComplete", this.onNextDelay.bind(this));
 		this.addEvent("preload", this.onStart.bind(this));
-		this.addEvent("select", this.onSelect.bind(this));
+		var controllerOptions = this.options.controller;
+		var controller = this.container.getElement("." + controllerOptions.controllerClass);
+		this.controller = new Gradually.Gallery.Controller(controller, {
+			"onSelect": this.onSelect.bind(this)
+		});
 		this.start();
 	},
-
-//	onNextDelay: function() {
-	//	this.next.delay(this.options.interval, this);
-//	},
 
 	onStart: function() {
 //		var information = this.container.getElement(".information");
@@ -78,30 +85,11 @@ Gradually.Gallery = new Class({
 //		this.next.delay(this.options.interval, this);
 	},
 
-	onSelect: function(index, panel) {
-//		this.title.set("html", panel.title);
-//		this.currentPanel.set("html", index + 1);
-	},
-
-	prev: function() {
-	},
-
-	next: function() {
-/*
-		if (this.current < this.panels.length - 1) {
-			var nextIndex = this.current + 1;
-			this.set(nextIndex);
-		} else {
-			this.set(0);
-		}
-*/
+	onSelect: function(index, image) {
+		this.set(index);
 	}
 
 });
-
-
-
-
 
 
 Gradually.Gallery.Controller = new Class({
@@ -116,9 +104,7 @@ Gradually.Gallery.Controller = new Class({
 		'nextClass': 'next',
 		'disableOpacity': 0.6
 		/*
-		'onNext': $empty,
-		'onPrev': $empty,
-		'onChange': $empty
+		'onSelect': $empty
 		*/
 	},
 
@@ -172,6 +158,7 @@ Gradually.Gallery.Controller = new Class({
 
 	set: function(index) {
 		this.current = index;
+		this.fireEvent("select", [index, this.images[index]]);
 		var range = this.getRange();
 		this.images.each(function(image, key) {
 			var parent = image.getParent("li");

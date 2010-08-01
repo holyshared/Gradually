@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>Gradually</title>
+		<title>Gradually.Gallery.js</title>
 		<meta name="keywords" content="mootools,demo,javascript,animation,canvas" />
 		<meta name="description" content="" />
 		<meta name="author" content="Noritaka Horio" />
@@ -18,12 +18,11 @@
 		<script type="text/javascript" src="../Source/Gradually.Gallery.js"></script>
 		<script type="text/javascript">
 			window.addEvent("domready", function() {
-				var drawer = new ImageDrawer.Grid({
-					'gridHeight': 55,
-					'gridWidth': 65,
+				var drawer = new ImageDrawer.Expand({
+					'slideWidth': 65,
 					'interval': 70,
-					'duration': 600,
-					'transition': 'expo:in'
+					'duration': 300,
+					'transition': 'expo:out'
 				});
 
 				var container = document.id("gallery");
@@ -39,15 +38,12 @@
 					}
 				});
 				g.start();
-
-				var c = container.getElement(".graduallyController");
-				new Gradually.Gallery.Controller(c);
 			});
 		</script>
 	</head>
 	<body>
 		<div id="warpper">
-			<h1>Gradually.Gallery</h1>
+			<h1>Gradually.Gallery.js</h1>
 			<div id="gallery" class="gradually">
 				<ul class="graduallyImages">
 					<li><img title="image1 title" alt="image1 discription" src="../Demos/images/img_demo1.jpg" width="650" height="275" /></li>
@@ -85,5 +81,7 @@
 					<li class="next"><a title="next" href="#">next</a></li>
 				</ul>
 			</div>
+			<p id="message"></p>
 	    </div>
-	</body></html> 
+	</body>
+</html> 
