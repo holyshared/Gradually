@@ -1,6 +1,6 @@
 /*
 ---
-description: Gradually is an experimental slide show plug-in using the canvas element.
+description: The slide show using Gradually can be used.
 
 license: MIT-style
 
@@ -29,8 +29,12 @@ requires:
   - Fx/Fx.Transitions
   more/1.2.4.2:
   - Assets
+  imagedrawer/1.0:
+  - ImageDrawer/ImageDrawer
+  - ImageDrawer/ImageDrawer.Grid
+  - ImageDrawer/ImageDrawer.Expand
 
-provides: [Gradually]
+provides: [Gradually, Gradually.Slideshow, Gradually.Gallery]
 
 ...
 */
@@ -43,7 +47,7 @@ Gradually.Slideshow = new Class({
 	options: {
 		'drawer': null,
 		'images': null,
-		'interval': 1000,
+		'interval': 3000,
 		'zIndex': 9000,
 		'titleClass': 'title',
 		'currentClass': 'current',

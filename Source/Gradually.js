@@ -1,6 +1,6 @@
 /*
 ---
-description: Gradually is an experimental slide show plug-in using the canvas element.
+description: Gallery API using the canvas element is offered.
 
 license: MIT-style
 
@@ -34,7 +34,7 @@ requires:
   - ImageDrawer/ImageDrawer.Grid
   - ImageDrawer/ImageDrawer.Expand
 
-provides: [Gradually]
+provides: [Gradually, Gradually.Slideshow, Gradually.Gallery]
 
 ...
 */
@@ -47,6 +47,7 @@ var Gradually = new Class({
 		'drawer': null,
 		'images': null,
 		'zIndex': 9000,
+		'defaultIndex': 0
 		/*
 			onPreload: $empty,
 			onSelect: $empty,
@@ -61,7 +62,7 @@ var Gradually = new Class({
 	initialize: function (container, options) {
 		this.setOptions(options);
 		this.container = container;
-		this.current = 0;
+		this.current = this.options.defaultIndex;
 		this.drawer = null;
 		this.panels = [];
 		this.setDefaultValues();
