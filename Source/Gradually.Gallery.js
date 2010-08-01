@@ -110,7 +110,7 @@ Gradually.Gallery.Controller = new Class({
 
 	options: {
 		'defaultIndex': 0,
-		'prepage': 5
+		'prepage': 5,
 		'containerClass': 'graduallyThumbnails',
 		'prevClass': 'prev',
 		'nextClass': 'next',
@@ -131,34 +131,41 @@ Gradually.Gallery.Controller = new Class({
 		this.set(this.options.defaultIndex);
 		this.prevButton.addEvent("click", this.onPrevClick.bind(this));
 		this.nextButton.addEvent("click", this.onNextClick.bind(this));
+		this.images.addEvent("click", this.onThumbnailClick.bind(this));
 	},
 
-	onPrevClick: function() {
+	onPrevClick: function(event) {
+		event.stop();
 		if (this.current - 1 >= 0) {
 			this.current--;
 			this.set(this.current);
 		}
 	},
 
-	onNextClick: function() {
+	onNextClick: function(event) {
+		event.stop();
 		if (this.current + 1 <= this.images.length - 1) {
 			this.current++;
 			this.set(this.current);
 		}
 	},
 
+	onThumbnailClick: function(event) {
+		event.stop();
+		var index = this.images.indexOf(event.target);
+		this.set(index);
+	},
+
 	getRange: function() {
-		var sIndex = eIndex = this.current;
-		var page = Math.floor(this.current / this.options.prepage);
-		if (this.current <= this.options.prepage - 1) {
-			sIndex = 0;
-			eIndex = this.options.prepage - 1;
-		} else if (this.current == this.images.length - 1) {
-			sIndex = this.current - this.options.prepage + 1;
-			eIndex = this.images.length - 1;
+		var prepage = this.options.prepage;
+		var count = (prepage - 1) / 2;
+		var diff = this.images.length - (this.current + count);
+		if (this.images.length - 1 - count <= this.current) {
+			var sIndex = this.images.length - this.options.prepage;
+			var eIndex = this.images.length - 1;
 		} else {
-			sIndex = page * this.options.prepage + 1
-			eIndex = sIndex + this.options.prepage - 1;
+			var sIndex = ((this.current - count) < 0) ? 0 : this.current - count;
+			var eIndex = ((this.current + count) >= prepage) ? this.current + count : prepage - 1;
 		}
 		return {"from": sIndex, "to": eIndex};
 	},
