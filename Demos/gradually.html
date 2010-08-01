@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<title>Gradually</title>
+		<meta name="keywords" content="mootools,demo,javascript,animation,canvas" />
+		<meta name="description" content="" />
+		<meta name="author" content="Noritaka Horio" />
+		<meta name="copyright" content="2009 Noritaka Horio All rights reserved" />
+		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen,print" />
+		<link rel="stylesheet" type="text/css" href="css/gradually.css" media="screen,print" />
+		<script type="text/javascript" src="js/libraries/mootools-1.2.4-core.js"></script>
+		<script type="text/javascript" src="js/libraries/mootools-1.2.4.2-more.js"></script>
+		<script type="text/javascript" src="js/libraries/image-drawer/ImageDrawer.js"></script>
+		<script type="text/javascript" src="js/libraries/image-drawer/ImageDrawer.Grid.js"></script>
+		<script type="text/javascript" src="js/libraries/image-drawer/ImageDrawer.Expand.js"></script>
+		<script type="text/javascript" src="../Source/Gradually.js"></script>
+		<script type="text/javascript">
+			window.addEvent("domready", function() {
+				var drawer = new ImageDrawer.Grid({
+					'gridHeight': 55,
+					'gridWidth': 65,
+					'interval': 70,
+					'duration': 600,
+					'transition': 'expo:in'
+				});
+
+				var container = document.id("gradually");
+				var images = $$(".gradually li img");
+
+				var gallery = new Gradually(container, {
+					'images': images,
+					'drawer': drawer
+				});
+				gallery.start();
+
+				var nav = $("nav").getElements("li a");
+				nav.addEvent("click", function(event) {
+					var index = nav.indexOf(event.target);
+					gallery.set(index);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="warpper">
+			<h1>Gradually</h1>
+			<ul id="nav">
+				<li><a href="#">set1</a></li>
+				<li><a href="#">set2</a></li>
+				<li><a href="#">set3</a></li>
+				<li><a href="#">set4</a></li>
+				<li><a href="#">set5</a></li>
+				<li><a href="#">set6</a></li>
+			</ul>
+
+			<div id="gradually" class="gradually">
+				<ul class="graduallyImages">
+					<li><img title="image1 title" alt="image1 discription" src="../Demos/images/img_demo1.jpg" width="650" height="275" /></li>
+					<li><img title="image2 title" alt="image2 discription" src="../Demos/images/img_demo2.jpg" width="650" height="275" /></li>
+					<li><img title="image3 title" alt="image3 discription" src="../Demos/images/img_demo3.jpg" width="650" height="275" /></li>
+					<li><img title="image4 title" alt="image4 discription" src="../Demos/images/img_demo4.jpg" width="650" height="275" /></li>
+					<li><img title="image5 title" alt="image5 discription" src="../Demos/images/img_demo5.jpg" width="650" height="275" /></li>
+					<li><img title="image6 title" alt="image6 discription" src="../Demos/images/img_demo6.jpg" width="650" height="275" /></li>
+				</ul>
+		    </div>
+
+            <div id="footer">
+				<p id="copyright">Copyright 2010 Noritaka Horio All rigths reserved.</p>
+            </div>
+	    </div>
+	</body>
+</html> 

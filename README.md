@@ -219,37 +219,45 @@ HTML to use Gradually.Gallery.js becomes as follows.
 
 	#HTML
 	<div id="gallery" class="gradually">
-		<ul class="graduallyImages">
-			<li><img title="image1 title" alt="image1 discription" src="../Demos/images/img_demo1.jpg" width="650" height="275" /></li>
-			<li><img title="image2 title" alt="image2 discription" src="../Demos/images/img_demo2.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image3 title" alt="image3 discription" src="../Demos/images/img_demo3.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image4 title" alt="image4 discription" src="../Demos/images/img_demo4.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image5 title" alt="image5 discription" src="../Demos/images/img_demo5.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image6 title" alt="image6 discription" src="../Demos/images/img_demo6.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image7 title" alt="image7 discription" src="../Demos/images/img_demo7.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image8 title" alt="image8 discription" src="../Demos/images/img_demo8.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image9 title" alt="image9 discription" src="../Demos/images/img_demo9.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image10 title" alt="image10 discription" src="../Demos/images/img_demo10.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image11 title" alt="image11 discription" src="../Demos/images/img_demo11.jpg" width="650" height="275" style="display: none;" /></li>
-			<li><img title="image12 title" alt="image12 discription" src="../Demos/images/img_demo12.jpg" width="650" height="275" style="display: none;" /></li>
-		</ul>
+
+		<div class="graduallyView">
+			<ul class="graduallyImages">
+				<li><img title="image1 title" alt="image1 discription" src="../Demos/images/img_demo1.jpg" width="650" height="275" /></li>
+				<li><img title="image2 title" alt="image2 discription" src="../Demos/images/img_demo2.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image3 title" alt="image3 discription" src="../Demos/images/img_demo3.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image4 title" alt="image4 discription" src="../Demos/images/img_demo4.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image5 title" alt="image5 discription" src="../Demos/images/img_demo5.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image6 title" alt="image6 discription" src="../Demos/images/img_demo6.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image7 title" alt="image7 discription" src="../Demos/images/img_demo7.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image8 title" alt="image8 discription" src="../Demos/images/img_demo8.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image9 title" alt="image9 discription" src="../Demos/images/img_demo9.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image10 title" alt="image10 discription" src="../Demos/images/img_demo10.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image11 title" alt="image11 discription" src="../Demos/images/img_demo11.jpg" width="650" height="275" style="display: none;" /></li>
+				<li><img title="image12 title" alt="image12 discription" src="../Demos/images/img_demo12.jpg" width="650" height="275" style="display: none;" /></li>
+			</ul>
+			<p class="titlebar">
+				<strong class="title"></strong>
+				<span class="current"></span>&nbsp;/&nbsp;<span class="total"></span>
+			</p>
+		</div>
+
 
 		<ul class="graduallyController">
 			<li class="prev"><a title="prev" href="#">prev</a></li>
 			<li>
 				<ul class="graduallyThumbnails">
-					<li><a href="#"><img title="image1 title" alt="image1 discription" src="../Demos/images/img_demo1_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image2 title" alt="image2 discription" src="../Demos/images/img_demo2_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image3 title" alt="image3 discription" src="../Demos/images/img_demo3_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image4 title" alt="image4 discription" src="../Demos/images/img_demo4_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image5 title" alt="image5 discription" src="../Demos/images/img_demo5_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image6 title" alt="image6 discription" src="../Demos/images/img_demo6_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image7 title" alt="image7 discription" src="../Demos/images/img_demo7_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image8 title" alt="image8 discription" src="../Demos/images/img_demo8_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image9 title" alt="image9 discription" src="../Demos/images/img_demo9_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image10 title" alt="image10 discription" src="../Demos/images/img_demo10_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image11 title" alt="image11 discription" src="../Demos/images/img_demo11_thumb.jpg" /></a></li>
-					<li><a href="#"><img title="image12 title" alt="image12 discription" src="../Demos/images/img_demo12_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image1 title" alt="image1 discription" src="../Demos/images/img_demo1_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image2 title" alt="image2 discription" src="../Demos/images/img_demo2_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image3 title" alt="image3 discription" src="../Demos/images/img_demo3_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image4 title" alt="image4 discription" src="../Demos/images/img_demo4_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image5 title" alt="image5 discription" src="../Demos/images/img_demo5_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image6 title" alt="image6 discription" src="../Demos/images/img_demo6_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image7 title" alt="image7 discription" src="../Demos/images/img_demo7_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image8 title" alt="image8 discription" src="../Demos/images/img_demo8_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image9 title" alt="image9 discription" src="../Demos/images/img_demo9_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image10 title" alt="image10 discription" src="../Demos/images/img_demo10_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image11 title" alt="image11 discription" src="../Demos/images/img_demo11_thumb.jpg" /></a></li>
+					<li><a href=""><img title="image12 title" alt="image12 discription" src="../Demos/images/img_demo12_thumb.jpg" /></a></li>
 				</ul>
 			</li>
 			<li class="next"><a title="next" href="#">next</a></li>
