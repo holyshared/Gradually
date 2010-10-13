@@ -1,7 +1,13 @@
 name: Gradually
+
 author: holyshared
+
 category: Widgets
+
 tags: [gallery, canvas, slideshow]
+
 demo: http://holyshared.github.com/Gradually/
-current: 2.0
+
+current: 2.1
+
 #docs: http://url.to.docs

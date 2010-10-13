@@ -9,43 +9,42 @@
 		<meta name="copyright" content="2009 Noritaka Horio All rights reserved" />
 		<link rel="stylesheet" type="text/css" href="../Demos/css/reset.css" media="screen,print" />
 		<link rel="stylesheet" type="text/css" href="../Demos/css/gradually.gallery.css" media="screen,print" />
-		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4.2-more.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.Grid.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.Expand.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-core-1.3.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-more.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/Source/ImageDrawer.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/Source/ImageDrawer.Grid.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/Source/ImageDrawer.Expand.js"></script>
 		<script type="text/javascript" src="../Source/Gradually.js"></script>
 		<script type="text/javascript" src="../Source/Gradually.Gallery.js"></script>
 		<script type="text/javascript">
 			window.addEvent("domready", function() {
 				var drawer = new ImageDrawer.Expand({
-					'slideWidth': 65,
-					'interval': 70,
-					'duration': 300,
-					'transition': 'expo:out'
+					slideWidth: 65,
+					interval: 70,
+					duration: 300,
+					transition: 'expo:out'
 				});
 
-				var container = document.id("gallery");
-				var images = $$(".graduallyImages li img");
+				var container = document.id('gallery');
+				var images = $$('.graduallyImages li img');
 
-				//
 				var g = new Gradually.Gallery(container, {
-					'images': images,
-					'drawer': drawer,
-					'controller': {
-						'disableOpacity': 0.4
+					images: images,
+					drawer: drawer,
+					controller: {
+						disableOpacity: 0.4
 					},
 					onPreload: function() {
-						$("message").set("html", "preload");
+						$('message').set('html', 'preload');
 					},
 					onSelect: function(index, panel) {
-						$("message").set("html", "select");
+						$('message').set('html', 'select');
 					},
-					'onDrawStart': function(panel, drawer) {
-						$("message").set("html", "drawStart");
+					onDrawStart: function(panel, drawer) {
+						$('message').set('html', 'drawStart');
 					},
-					'onDrawComplete': function(panel, drawer) {
-						$("message").set("html", "drawComplete");
+					onDrawComplete: function(panel, drawer) {
+						$('message').set('html', 'drawComplete');
 					}
 				});
 				g.start();

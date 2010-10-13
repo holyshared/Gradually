@@ -1,5 +1,7 @@
 /*
 ---
+name: Gradually
+
 description: The slide show using Gradually can be used.
 
 license: MIT-style
@@ -39,19 +41,22 @@ provides: [Gradually, Gradually.Slideshow, Gradually.Gallery]
 ...
 */
 
+(function($){
+
+var Gradually = (this.Gradually || {});
 
 Gradually.Slideshow = new Class({
 
 	Extends: Gradually,
 
 	options: {
-		'drawer': null,
-		'images': null,
-		'interval': 3000,
-		'zIndex': 9000,
-		'titleClass': 'title',
-		'currentClass': 'current',
-		'totalClass': 'total'
+		drawer: null,
+		images: null,
+		interval: 3000,
+		zIndex: 9000,
+		titleClass: 'title',
+		currentClass: 'current',
+		totalClass: 'total'
 		/*
 			onPreload: $empty,
 			onSelect: $empty,
@@ -60,36 +65,36 @@ Gradually.Slideshow = new Class({
 		*/
 	},
 
-	initialize: function (container, options) {
+	initialize: function (container, options){
 		this.parent(container, options);
-		this.addEvent("drawComplete", this.onNextDelay.bind(this));
-		this.addEvent("preload", this.onStart.bind(this));
-		this.addEvent("select", this.onSelect.bind(this));
+		this.addEvent('drawComplete', this.onNextDelay.bind(this));
+		this.addEvent('preload', this.onStart.bind(this));
+		this.addEvent('select', this.onSelect.bind(this));
 		this.start();
 	},
 
-	onNextDelay: function() {
+	onNextDelay: function(){
 		this.next.delay(this.options.interval, this);
 	},
 
-	onStart: function() {
-		this.title = this.container.getElement("." + this.options.titleClass);
-		this.currentPanel = this.container.getElement("." + this.options.currentClass);
-		this.totalPanel = this.container.getElement("." + this.options.totalClass);
+	onStart: function(){
+		this.title = this.container.getElement('.' + this.options.titleClass);
+		this.currentPanel = this.container.getElement('.' + this.options.currentClass);
+		this.totalPanel = this.container.getElement('.' + this.options.totalClass);
 
 		var current = this.getCurrent();
-		this.title.set("html", current.title);
-		this.currentPanel.set("html", this.current + 1);
-		this.totalPanel.set("html", this.panels.length);
+		this.title.set('html', current.title);
+		this.currentPanel.set('html', this.current + 1);
+		this.totalPanel.set('html', this.panels.length);
 		this.next.delay(this.options.interval, this);
 	},
 
-	onSelect: function(index, panel) {
-		this.title.set("html", panel.title);
-		this.currentPanel.set("html", index + 1);
+	onSelect: function(index, panel){
+		this.title.set('html', panel.title);
+		this.currentPanel.set('html', index + 1);
 	},
 
-	next: function() {
+	next: function(){
 		if (this.current < this.panels.length - 1) {
 			var nextIndex = this.current + 1;
 			this.set(nextIndex);
@@ -99,3 +104,5 @@ Gradually.Slideshow = new Class({
 	}
 
 });
+
+}(document.id));

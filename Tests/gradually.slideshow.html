@@ -9,46 +9,45 @@
 		<meta name="copyright" content="2009 Noritaka Horio All rights reserved" />
 		<link rel="stylesheet" type="text/css" href="../Demos/css/reset.css" media="screen,print" />
 		<link rel="stylesheet" type="text/css" href="../Demos/css/gradually.slideshow.css" media="screen,print" />
-		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4-core.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/mootools-1.2.4.2-more.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.Grid.js"></script>
-		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/ImageDrawer.Expand.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-core-1.3.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/mootools-more.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/Source/ImageDrawer.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/Source/ImageDrawer.Grid.js"></script>
+		<script type="text/javascript" src="../Demos/js/libraries/image-drawer/Source/ImageDrawer.Expand.js"></script>
 		<script type="text/javascript" src="../Source/Gradually.js"></script>
 		<script type="text/javascript" src="../Source/Gradually.Slideshow.js"></script>
 		<script type="text/javascript">
-			window.addEvent("domready", function() {
+			window.addEvent('domready', function() {
 				var grid = new ImageDrawer.Grid({
-					'gridHeight': 55,
-					'gridWidth': 65,
-					'interval': 70,
-					'duration': 600,
-					'transition': 'expo:in'
+					gridHeight: 55,
+					gridWidth: 65,
+					interval: 70,
+					duration: 600,
+					transition: 'expo:in'
 				});
 
-				var type1 = document.id("type1");
-				var images = type1.getElements(".graduallyImages li img");
+				var type1 = document.id('type1');
+				var images = type1.getElements('.graduallyImages li img');
 
 				new Gradually.Slideshow(type1, {
-					'drawer': grid,
-					'images': images,
-					'interval': 3000
+					drawer: grid,
+					images: images,
+					interval: 3000
 				});
-
 
 				var expand = new ImageDrawer.Expand({
-					'slideWidth': 65,
-					'interval': 70,
-					'duration': 600,
-					'transition': 'expo:in:out'
+					slideWidth: 65,
+					interval: 70,
+					duration: 600,
+					transition: 'expo:in:out'
 				});
 
-				var type2 = document.id("type2");
-				var images = type2.getElements(".graduallyImages li img");
+				var type2 = document.id('type2');
+				var images = type2.getElements('.graduallyImages li img');
 				new Gradually.Slideshow(type2, {
-					'drawer': expand,
-					'images': images,
-					'interval': 3000
+					drawer: expand,
+					images: images,
+					interval: 3000
 				});
 			});
 		</script>
