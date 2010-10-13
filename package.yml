@@ -1,4 +1,21 @@
-name: Gradually
+name: "Gradually"
+
+exports: "gradually.js"
+
+web: "[http://sharedhat.com](http://sharedhat.com)"
+
+description: "ImageDrawer offers API that draws to the canvas in the image while doing animation."
+
+authors: "[Noritaka Horio](http://sharedhat.com)"
+
+license: "[MIT License](http://sharedhat.com/mit-license.txt)"
+
+copyright: "&copy; [Noritaka Horio](http://sharedhat.com)"
+
+sources:
+  - "Source/Gradually.js"
+  - "Source/Gradually.Gallery.js"
+  - "Source/Gradually.Slideshow.js"
 
 author: holyshared
 
@@ -9,5 +26,3 @@ tags: [gallery, canvas, slideshow]
 demo: http://holyshared.github.com/Gradually/
 
 current: 2.1
-
-#docs: http://url.to.docs

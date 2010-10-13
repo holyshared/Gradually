@@ -10,33 +10,30 @@ authors:
 - Noritaka Horio
 
 requires:
-  core/1.2.4:
   - Core/Core
+  - Core/Array
+  - Core/String
+  - Core/Number
+  - Core/Function
+  - Core/Object
+  - Core/Event
   - Core/Browser
-  - Native/Array
-  - Native/Function
-  - Native/Number
-  - Native/String
-  - Native/Hash
-  - Native/Event
-  - Class/Class
-  - Class/Class.Extras
-  - Element/Element
-  - Element/Element.Event
-  - Element/Element.Style
-  - Element/Element.Dimensions
-  - Utilities/Selecter
-  - Utilities/DomReady
-  - Fx/Fx
-  - Fx/Fx.Transitions
-  more/1.2.4.2:
-  - Assets
-  imagedrawer/1.0:
+  - Core/Class
+  - Core/Class.Extras
+  - Core/Slick.Parser
+  - Core/Slick.Finder
+  - Core/Element
+  - Core/Element.Style
+  - Core/Element.Event
+  - Core/Element.Dimensions
+  - Core/Fx
+  - Core/Fx.Transitions
+  - More/Asset
   - ImageDrawer/ImageDrawer
   - ImageDrawer/ImageDrawer.Grid
   - ImageDrawer/ImageDrawer.Expand
 
-provides: [Gradually, Gradually.Slideshow, Gradually.Gallery]
+provides: [Gradually.Gallery, Gradually.Gallery.Controller]
 
 ...
 */
