@@ -9,33 +9,33 @@
 		<meta name="copyright" content="2009 Noritaka Horio All rights reserved" />
 		<link rel="stylesheet" type="text/css" href="css/reset.css" media="screen,print" />
 		<link rel="stylesheet" type="text/css" href="css/gradually.css" media="screen,print" />
-		<script type="text/javascript" src="js/libraries/mootools-1.2.4-core.js"></script>
-		<script type="text/javascript" src="js/libraries/mootools-1.2.4.2-more.js"></script>
-		<script type="text/javascript" src="js/libraries/image-drawer/ImageDrawer.js"></script>
-		<script type="text/javascript" src="js/libraries/image-drawer/ImageDrawer.Grid.js"></script>
-		<script type="text/javascript" src="js/libraries/image-drawer/ImageDrawer.Expand.js"></script>
+		<script type="text/javascript" src="js/libraries/mootools-core-1.3.js"></script>
+		<script type="text/javascript" src="js/libraries/mootools-more.js"></script>
+		<script type="text/javascript" src="js/libraries/image-drawer/Source/ImageDrawer.js"></script>
+		<script type="text/javascript" src="js/libraries/image-drawer/Source/ImageDrawer.Grid.js"></script>
+		<script type="text/javascript" src="js/libraries/image-drawer/Source/ImageDrawer.Expand.js"></script>
 		<script type="text/javascript" src="../Source/Gradually.js"></script>
 		<script type="text/javascript">
-			window.addEvent("domready", function() {
+			window.addEvent('domready', function() {
 				var drawer = new ImageDrawer.Grid({
-					'gridHeight': 55,
-					'gridWidth': 65,
-					'interval': 70,
-					'duration': 600,
-					'transition': 'expo:in'
+					gridHeight: 55,
+					gridWidth: 65,
+					interval: 70,
+					duration: 600,
+					transition: 'expo:in'
 				});
 
-				var container = document.id("gradually");
-				var images = $$(".gradually li img");
+				var container = document.id('gradually');
+				var images = $$('.gradually li img');
 
 				var gallery = new Gradually(container, {
-					'images': images,
-					'drawer': drawer
+					images: images,
+					drawer: drawer
 				});
 				gallery.start();
 
-				var nav = $("nav").getElements("li a");
-				nav.addEvent("click", function(event) {
+				var nav = $('nav').getElements('li a');
+				nav.addEvent('click', function(event) {
 					var index = nav.indexOf(event.target);
 					gallery.set(index);
 				});
