@@ -1,5 +1,7 @@
 /*
 ---
+name: ImageDrawer.Grid
+
 description: It draws in the image in each small grid.
 
 license: MIT-style
@@ -8,31 +10,32 @@ authors:
 - Noritaka Horio
 
 requires:
-  core/1.2.4:
   - Core/Core
+  - Core/Array
+  - Core/String
+  - Core/Number
+  - Core/Function
+  - Core/Object
+  - Core/Event
   - Core/Browser
-  - Native/Array
-  - Native/Function
-  - Native/Number
-  - Native/String
-  - Native/Hash
-  - Native/Event
-  - Class/Class
-  - Class/Class.Extras
-  - Element/Element
-  - Element/Element.Event
-  - Element/Element.Style
-  - Element/Element.Dimensions
-  - Utilities/Selecter
-  - Utilities/DomReady
-  - Fx/Fx
-  - Fx/Fx.Transitions
+  - Core/Class
+  - Core/Class.Extras
+  - Core/Element
+  - Core/Element.Style
+  - Core/Element.Event
+  - Core/Element.Dimensions
+  - Core/Fx
+  - Core/Fx.Transitions
+  - ImageDrawer/ImageDrawer
 
-provides: [ImageDrawer, ImageDrawer.Grid, ImageDrawer.Expand]
+provides: ImageDrawer.Grid
 
 ...
 */
 
+(function($){
+
+var ImageDrawer = (this.ImageDrawer || {});
 
 ImageDrawer.Grid = new Class({
 
@@ -167,3 +170,5 @@ ImageDrawer.Grid = new Class({
 	}
 
 });
+
+}(document.id));
