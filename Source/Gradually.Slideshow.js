@@ -1,6 +1,6 @@
 /*
 ---
-name: Gradually
+name: Gradually.Slideshow
 
 description: The slide show using Gradually can be used.
 
@@ -28,10 +28,11 @@ requires:
   - Core/Element.Dimensions
   - Core/Fx
   - Core/Fx.Transitions
-  - More/Asset
+  - More/Assets
   - ImageDrawer/ImageDrawer
   - ImageDrawer/ImageDrawer.Grid
   - ImageDrawer/ImageDrawer.Expand
+  - Gradually/Gradually
 
 provides: Gradually.Slideshow
 

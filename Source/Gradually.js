@@ -28,7 +28,7 @@ requires:
   - Core/Element.Dimensions
   - Core/Fx
   - Core/Fx.Transitions
-  - More/Asset
+  - More/Assets
   - ImageDrawer/ImageDrawer
   - ImageDrawer/ImageDrawer.Grid
   - ImageDrawer/ImageDrawer.Expand
