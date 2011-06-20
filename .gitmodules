@@ -1,0 +1,3 @@
+[submodule "Modules"]
+	path = Modules
+	url = git://github.com/holyshared/ImageDrawer.git
