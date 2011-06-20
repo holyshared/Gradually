@@ -11,7 +11,12 @@ Please download it from the following site.
 ImageDrawer Library
 [http://mootools.net/forge/p/imagedrawer](http://mootools.net/forge/p/imagedrawer)
 
+The library must use the one of the build of the following directory.
 
+* Build/gradually.js
+* Build/gradually.slideshow.js
+* Build/gradually.gallery.js
+* Build/image-drawer.js
 
 How to use
 ----------
@@ -317,3 +322,19 @@ ImageDrawer is made an instance, and it specifies it for the option of Gradually
 * **prevClass**: (string) - Class of previous button. Default is 'prev'.
 * **nextClass**: (string) - Class of previous button. Default is 'next'.
 * **disableOpacity**: (number) - Transparencys other than current image. Default is 0.4.
+
+
+Method of build
+------------------------------
+
+### Only Gradually
+packager build Gradually/Gradually +use-only Gradually
+
+### Slide show of Gradually
+packager build Gradually/Gradually.Slideshow +use-only Gradually
+
+### Gallery of Gradually
+packager build Gradually/Gradually.Gallery +use-only Gradually
+
+### All of Gradually
+packager build Gradually/* +use-only Gradually
